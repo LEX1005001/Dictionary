@@ -54,22 +54,75 @@
                     </Image>
                 </Button>
 
-                <Button x:Name="Profile"
+                <Button x:Name="Dictionary"
                         Height="100"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Margin="0,0,0,10">
-                    
+                    <Image Source="Images/dictionary.png"
+                           Stretch="None">
+                    </Image>
                 </Button>
 
-                <Button x:Name="Settings"
+                <Button x:Name="Add"
                         Height="100"
                         Background="Transparent"
                         BorderBrush="Transparent"
                         Margin="0,10,0,0">
+                    <Image Source="Images/add.png"
+                           Stretch="None">
+                    </Image>
+                </Button>
+
+                <Button x:Name="Test"
+                        Height="100"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Margin="0,10,0,0">
+                    <Image Source="Images/test.png"
+                           Stretch="None">
+                        
+                    </Image>
                     
                 </Button>
             </StackPanel>
+            
+            <!--Header grid-->
+            <Grid Height="80"
+                  VerticalAlignment="Top"
+                  Background="#233C4F">
+                
+                <!--Title-->
+                <TextBlock Text="None"
+                           FontFamily="none"
+                           FontSize="26"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="#E0FFFF">
+                </TextBlock>
+                
+                <!--Exit Button-->
+                <Button Height="40"
+                        Width="40"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Margin="0,0,20,0">
+
+                    <Image x:Name="Exit"
+                           Source="Images/exit.png">
+                        
+                    </Image>
+                </Button>
+            </Grid>
+            
+            <!--Footer-->
+            <Grid Height="80"
+                  VerticalAlignment="Bottom"
+                  Background="#233C4F">
+                
+            </Grid>
         </Grid>
 
         
