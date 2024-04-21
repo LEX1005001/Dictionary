@@ -18,6 +18,11 @@ namespace DictionatyDataSource
         public SQLiteCommand Command { get => command; set => command = value; }
         public SQLiteConnection Connection { get => connection; set => connection = value; }
 
+        //Получение слов:
+
+        /// <summary>
+        /// Получить всё и вывести
+        /// </summary>
         public void GetAll()
         {
             command = new SQLiteCommand(connection)
@@ -34,6 +39,10 @@ namespace DictionatyDataSource
                Console.WriteLine($"id = {row.Field<Int64>("Id")} themeId = {row.Field<Int64>("ThemeId")} wordId = {row.Field<Int64>("WordId")} translation = {row.Field<string>("Translation")}");
             }
         }
+
+        /// <summary>
+        /// Получить все темы и вывести
+        /// </summary>
         public void GetAll_themes()
         {
             command = new SQLiteCommand(connection)
@@ -50,6 +59,9 @@ namespace DictionatyDataSource
                 Console.WriteLine($"id = {row.Field<Int64>("Id")} name = {row.Field<string>("Name")}");
             }
         }
+        /// <summary>
+        /// Получение всех слов и вывод
+        /// </summary>
         public void GetAll_words()
         {
             command = new SQLiteCommand(connection)
@@ -66,7 +78,48 @@ namespace DictionatyDataSource
                 Console.WriteLine($"id = {row.Field<Int64>("Id")} this_word = {row.Field<string>("thisWord")}");
             }
         }
+
+        //Добавление:
+
+        /// <summary>
+        /// Добавление слова
+        /// </summary>
         public void AddWord()
+        {
+            command = new SQLiteCommand(connection)
+            {
+                CommandText = ""
+            };
+        }
+
+        /// <summary>
+        /// Добавление темы
+        /// </summary>
+        public void AddTheme()
+        {
+            command = new SQLiteCommand(connection)
+            {
+                CommandText = ""
+            };
+        }
+
+        //Удаление:
+
+        /// <summary>
+        /// Удаление слова по индексу
+        /// </summary>
+        public void RemoveWord()
+        {
+            command = new SQLiteCommand(connection)
+            {
+                CommandText=""
+            };
+        }
+
+        /// <summary>
+        /// Удаление темы по индексу
+        /// </summary>
+        public void RemoveTheme()
         {
             command = new SQLiteCommand(connection)
             {

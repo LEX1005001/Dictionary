@@ -1,0 +1,79 @@
+﻿<Window x:Class="DictionaryUI_WPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DictionaryUI_WPF"
+        mc:Ignorable="d"
+        Title="MainWindow"
+        Height="800"
+        Width="1400"
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Background="Transparent">
+    
+    <Grid>
+   
+        
+        <Grid Margin="20" Background="#1C2F3E">
+            
+            <!--Shadow-->
+            <Grid.Effect>
+                <DropShadowEffect
+                    
+                    BlurRadius="30" 
+                    ShadowDepth="2"
+                    Direction="-90"
+                    Color="Gray">
+
+                </DropShadowEffect>
+            </Grid.Effect>
+            <!--add stack panel-->
+            
+            <StackPanel Width="100"
+                        HorizontalAlignment="Left"
+                        Background="#14212B">
+
+                <Image x:Name="Logo"
+                       Source="Images/test.png"
+                       Stretch="None"
+                       Height="100">
+                </Image>
+                <!--Buttons 3 home,translations ,etc.-->
+                <Button x:Name="Home"
+                        Height="100"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Margin="0,100,0,20">
+                    
+                    <!--add image-->
+                    <Image Source="Images/home2.png" 
+                           Stretch="None">
+                        
+                    </Image>
+                </Button>
+
+                <Button x:Name="Profile"
+                        Height="100"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Margin="0,0,0,10">
+                    
+                </Button>
+
+                <Button x:Name="Settings"
+                        Height="100"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Margin="0,10,0,0">
+                    
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        
+        
+    </Grid>
+    
+</Window>

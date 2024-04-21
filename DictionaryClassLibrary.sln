@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryDataSourceTestCon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryConsoleApp", "DictionaryConsoleApp\DictionaryConsoleApp.csproj", "{2D94D3C6-502F-4300-807B-936434EBFFE5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryUI_WPF", "DictionaryUI_WPF\DictionaryUI_WPF.csproj", "{4C367269-7EFD-405C-9943-A9B008964FCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2D94D3C6-502F-4300-807B-936434EBFFE5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D94D3C6-502F-4300-807B-936434EBFFE5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D94D3C6-502F-4300-807B-936434EBFFE5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C367269-7EFD-405C-9943-A9B008964FCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C367269-7EFD-405C-9943-A9B008964FCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C367269-7EFD-405C-9943-A9B008964FCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C367269-7EFD-405C-9943-A9B008964FCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
