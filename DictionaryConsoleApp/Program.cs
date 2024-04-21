@@ -24,7 +24,7 @@ namespace DictionaryConsoleApp
 
             DictionaryWords dictionary2 = new DictionaryWords(); //Создаём словарь dictionary2
             dictionary2.Theme = "Theme 2";                       //Даём ему тему Theme 2
-            
+
 
             List<DictionaryWords> libraries = new List<DictionaryWords>//Сохраняем все словари в библиотеку libraries
             {
@@ -47,26 +47,26 @@ namespace DictionaryConsoleApp
                 Console.WriteLine($"Word in Theme: {word.Word}, Translation: {word.Translation}");
 
             }
-            
+
             DictionaryWords dictionary3 = DictionaryWords.LoadDictionaryFromXml("Animals.xml"); //Создаём новый словарик и загружаем в него словарь из Animals.xml 
-            
+
             dictionary3.Info(); //Выводим его содержимое
             DictionaryWords.AddDictionaryToList(libraries, dictionary3); //Добавляем новый словарь в библиотеку
             List<DictionaryWords> themes1 = DictionaryWords.GetAllThemesFromLibrary(libraries);//Сохраняем темы новой библиотеки
             foreach (var theme in themes1)
             {
-                Console.WriteLine("Тема: "+theme.Theme);    //Выводим их и видим что добавление прошло успешно
+                Console.WriteLine("Тема: " + theme.Theme);    //Выводим их и видим что добавление прошло успешно
             }
 
 
             Console.ReadKey();
-            
 
-            
-            
+
+
+
         }
 
 
     }
-    
+
 }

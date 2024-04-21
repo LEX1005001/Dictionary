@@ -66,6 +66,13 @@ namespace DictionatyDataSource
                 Console.WriteLine($"id = {row.Field<Int64>("Id")} this_word = {row.Field<string>("thisWord")}");
             }
         }
+        public void AddWord()
+        {
+            command = new SQLiteCommand(connection)
+            {
+                CommandText = ""
+            };
+        }
     }
-
+    
 }
