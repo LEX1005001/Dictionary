@@ -4,6 +4,19 @@
              xmlns:local="clr-namespace:DictionaryUI_WPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+
+                <ResourceDictionary Source="Styles/Page.xaml"/>
+                <ResourceDictionary Source="Styles/Image.xaml"/>
+                <ResourceDictionary Source="Styles/Text.xaml"/>
+                <ResourceDictionary Source="Styles/Button.xaml"/>
+                <ResourceDictionary Source="Utilites/DataTamplate.xaml"/>
+
+            </ResourceDictionary.MergedDictionaries>
+            
+        </ResourceDictionary>
          
     </Application.Resources>
 </Application>

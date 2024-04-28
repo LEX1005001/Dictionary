@@ -346,9 +346,10 @@
                 
                  <!--Logo-->
                 <Image x:Name="Logo"
-                       Source="Images/test.png"
+                       Source="Images/logo1.png"
                        Stretch="None"
-                       Height="100">
+                       Height="100"
+                       Margin="0,100,0,0">
                 </Image>
                 
                 <!--Buttons 3 home,translations ,etc.-->
@@ -356,7 +357,7 @@
                         Height="100"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Margin="0,100,0,20">
+                        Margin="0,20,0,20" MouseEnter="Home_MouseEnter" MouseLeave="Home_MouseLeave">
                     
                     <!--add image-->
                     <Image Source="Images/home2.png" 
@@ -369,7 +370,7 @@
                         Height="100"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Margin="0,0,0,10">
+                        Margin="0,0,0,10" MouseEnter="Dictionary_MouseEnter" MouseLeave="Dictionary_MouseLeave">
                     <Image Source="Images/dictionary.png"
                            Stretch="None">
                     </Image>
@@ -379,7 +380,7 @@
                         Height="100"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Margin="0,10,0,0">
+                        Margin="0,10,0,0" MouseEnter="Add_MouseEnter" MouseLeave="Add_MouseLeave">
                     <Image Source="Images/add.png"
                            Stretch="None">
                     </Image>
@@ -389,7 +390,7 @@
                         Height="100"
                         Background="Transparent"
                         BorderBrush="Transparent"
-                        Margin="0,10,0,0">
+                        Margin="0,10,0,0" MouseEnter="Test_MouseEnter" MouseLeave="Test_MouseLeave">
                     <Image Source="Images/test.png"
                            Stretch="None">
                         
@@ -404,7 +405,7 @@
                   Background="#233C4F">
                 
                 <!--Title-->
-                <TextBlock Text="None"
+                <TextBlock Text="Learn and Memorize"
                            FontFamily="none"
                            FontSize="26"
                            VerticalAlignment="Center"
@@ -419,7 +420,7 @@
                         BorderThickness="0"
                         VerticalAlignment="Center"
                         HorizontalAlignment="Right"
-                        Margin="0,0,20,0">
+                        Margin="0,0,20,0" Click="Button_Click">
 
                     <Image x:Name="Exit"
                            Source="Images/exit.png">
