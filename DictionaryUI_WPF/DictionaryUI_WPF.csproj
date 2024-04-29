@@ -59,9 +59,10 @@
     <Compile Include="Utilites\Btn.cs" />
     <Compile Include="Utilites\RelayCommand.cs" />
     <Compile Include="Utilites\ViewModelBase.cs" />
-    <Compile Include="ViewModel\AddViewModel.cs" />
+    <Compile Include="ViewModel\ChangeWordViewModel.cs" />
     <Compile Include="ViewModel\DictionaryViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
+    <Compile Include="ViewModel\NavigationVM.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="View\AddView.xaml.cs">
       <DependentUpon>AddView.xaml</DependentUpon>
@@ -177,6 +178,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\logo1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DictionaryClassLibrary\DictionaryClassLibrary.csproj">
+      <Project>{02d503f6-dfe9-4847-ba3c-b4251a1c94bc}</Project>
+      <Name>DictionaryClassLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

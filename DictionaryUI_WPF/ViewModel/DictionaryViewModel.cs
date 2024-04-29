@@ -3,10 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using DictionaryUI_WPF.Model;
+using DictionaryClassLibrary;
 namespace DictionaryUI_WPF.ViewModel
 {
-    internal class DictionaryViewModel
+    class DictionaryViewModel : Utilites.ViewModelBase
     {
+        private readonly PageModel _pageModel;
+
+
+
+
+        public DictionaryViewModel()
+        {
+            _pageModel = new PageModel();
+        }
+
     }
 }

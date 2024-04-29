@@ -11,7 +11,7 @@
         <view:DictionaryView/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:AddViewModel}">
+    <DataTemplate DataType="{x:Type vm:ChangeWordViewModel}">
         <view:AddView/>
     </DataTemplate>
 
