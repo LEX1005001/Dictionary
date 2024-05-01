@@ -199,5 +199,11 @@
     <Resource Include="Images\edit.png" />
     <Resource Include="Images\remove.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\shutdown_def.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\shutdown_mo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

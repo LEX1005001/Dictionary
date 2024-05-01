@@ -17,24 +17,27 @@
     <Window.DataContext>
         <vm:NavigationVM/>
     </Window.DataContext>
-    
+
     <Grid>
         
+            
         <!--Window Border-->
         <Border Background="#212529"
                 CornerRadius="20"/>
 
         <Grid>
             
+
             <!--Base Grid-->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="228"/>
                 <ColumnDefinition Width="622"/>
             </Grid.ColumnDefinitions>
-            
+
             <!--Navigation Panel-->
             <Grid HorizontalAlignment="Left"
                   Width="228">
+
 
                 <Border Background="#272B2F"
                         CornerRadius="20,0,0,20"/>
@@ -121,16 +124,19 @@
 
             <Grid Grid.Column="1">
 
-                <ContentControl x:Name="Pages"/>
-                                <!--Content="{Binding CurrentView}"/>-->
+                <ContentControl x:Name="Pages"
+                                Content="{Binding CurrentView}"/>
+
 
             </Grid>
 
         </Grid>
+        
 
-        <!--<Button x:Name="CloseApp"/>-->
-                <!--Style="{}"/>-->
+        <Button x:Name="CloseApp"
+                Style="{StaticResource ExitApp}"
+                Click="CloseApp_Click" />
 
     </Grid>
-    
+
 </Window>

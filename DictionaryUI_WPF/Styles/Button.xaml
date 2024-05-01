@@ -38,37 +38,37 @@
                             <ContentPresenter/>
 
                         </Grid>
-                        
+
                     </Border>
 
                     <ControlTemplate.Triggers>
-                        
+
                         <Trigger Property="IsMouseOver"
                                  Value="True">
 
                             <Setter Property="Visibility"
                                     TargetName="Indicator"
                                     Value="Visible"/>
-                            
+
                         </Trigger>
 
                         <EventTrigger RoutedEvent="Border.MouseEnter"
                                       SourceName="border">
 
                             <BeginStoryboard>
-                                
+
                                 <Storyboard>
-                                    
+
                                     <ColorAnimation Storyboard.TargetName="BoarderBackground"
                                                     Storyboard.TargetProperty="Color"
                                                     From="#272B2F"
                                                     To="#3E434A"
                                                     Duration="0:0:0.3"/>
                                 </Storyboard>
-                                
-                            </BeginStoryboard> 
-                            
-                            
+
+                            </BeginStoryboard>
+
+
                         </EventTrigger>
 
                         <EventTrigger RoutedEvent="Border.MouseLeave"
@@ -97,13 +97,76 @@
                                     Value="Visible"/>
 
                         </Trigger>
-                              
+
                     </ControlTemplate.Triggers>
-                    
+
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-        
+    </Style>
+
+    <ImageBrush x:Key="close_app_def"
+            ImageSource="/Images/shutdown_def.png"
+            Stretch="None" />
+
+    <ImageBrush x:Key="close_app_mo"
+            ImageSource="/Images/shutdown_mo.png"
+            Stretch="None" />
+
+    <Style x:Key="ExitApp"
+       TargetType="{x:Type Button}">
+
+        <Setter Property="Height"
+            Value="40" />
+        <Setter Property="Width"
+            Value="40" />
+        <Setter Property="HorizontalAlignment"
+            Value="Right" />
+        <Setter Property="VerticalAlignment"
+            Value="Top" />
+        <Setter Property="Margin"
+            Value="0,15,15,0" />
+
+        <Setter Property="Template">
+
+            <Setter.Value>
+
+                <ControlTemplate TargetType="{x:Type Button}">
+
+                    <Border x:Name="border"
+                        BorderThickness="0"
+                        Background="{StaticResource close_app_def}">
+
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+
+                        <Trigger Property="IsMouseOver"
+                             Value="True">
+
+                            <Setter Property="Background"
+                                TargetName="border"
+                                Value="{StaticResource close_app_mo}" />
+
+                        </Trigger>
+
+                        <Trigger Property="IsPressed"
+                             Value="True">
+
+                            <Setter Property="Background"
+                                TargetName="border"
+                                Value="{StaticResource close_app_mo}" />
+
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+
+                </ControlTemplate>
+
+            </Setter.Value>
+
+        </Setter>
 
     </Style>
+
 </ResourceDictionary>

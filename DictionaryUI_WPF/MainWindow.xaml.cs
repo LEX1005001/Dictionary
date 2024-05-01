@@ -26,5 +26,15 @@ namespace DictionaryUI_WPF
         {
             InitializeComponent();
         }
+
+        /// <summary>
+        /// Кнопка выхода
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

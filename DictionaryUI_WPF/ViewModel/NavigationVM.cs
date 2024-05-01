@@ -14,7 +14,7 @@ namespace DictionaryUI_WPF.ViewModel
     {
         private object _currentView;
 
-        private object CurrentView
+        public object CurrentView
         {
             get { return _currentView; }
             set { _currentView = value; OnProperetyChanged(); }
