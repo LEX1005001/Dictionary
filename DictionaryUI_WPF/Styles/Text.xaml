@@ -6,13 +6,20 @@
 
         <Setter Property="FontFamily"
                 Value="/Fonts/#Rubik"/>
+        
         <Setter Property="VerticalAlignment"
                 Value="Center"/>
+        
         <Setter Property="HorizontalAlignment"
                 Value="Left"/>
+        
         <Setter Property="Foreground"
                 Value="#DBDBDB"/>
+        
         <Setter Property="FontSize"
+                Value="18"/>
+        
+        <Setter Property="Margin"
                 Value="70,0,0,0"/>
 
     </Style>

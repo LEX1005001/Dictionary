@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace DictionaryUI_WPF.View
 {
     /// <summary>
-    /// Логика взаимодействия для AddView.xaml
+    /// Логика взаимодействия для AddWordView.xaml
     /// </summary>
-    public partial class AddView : UserControl
+    public partial class AddWordView : UserControl
     {
-        public AddView()
+        public AddWordView()
         {
             InitializeComponent();
         }

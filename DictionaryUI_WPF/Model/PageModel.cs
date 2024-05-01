@@ -12,5 +12,7 @@ namespace DictionaryUI_WPF.Model
         public string Word { get; set; }
         public string Translation { get; set; }
         public string Theme { get; internal set; }
+        public string ThemeOfWord { get; internal set; }
+        public string TranslationOfNewWord { get; internal set; }
     }
 }

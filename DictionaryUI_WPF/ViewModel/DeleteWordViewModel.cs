@@ -8,17 +8,21 @@ using DictionaryClassLibrary;
 
 namespace DictionaryUI_WPF.ViewModel
 {
-    class DictionaryViewModel : Utilites.ViewModelBase
+    class DeleteWordViewModel:Utilites.ViewModelBase
     {
         private readonly PageModel _pageModel;
 
-
-
-
-        public DictionaryViewModel()
+        public int NumberId2Delete
         {
-            _pageModel = new PageModel();
+            get { return _pageModel.Id; }
+            set { _pageModel.Id = value; OnProperetyChanged(); }
         }
 
+
+        public DeleteWordViewModel()
+        {
+            _pageModel = new PageModel();
+            NumberId2Delete = 404;
+        }
     }
 }

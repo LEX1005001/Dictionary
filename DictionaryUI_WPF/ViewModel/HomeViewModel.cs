@@ -10,5 +10,13 @@ namespace DictionaryUI_WPF.ViewModel
     class HomeViewModel:Utilites.ViewModelBase
     {
         private readonly PageModel _pageModel;
+
+
+
+
+        public HomeViewModel()
+        {
+            _pageModel = new PageModel();
+        }
     }
 }

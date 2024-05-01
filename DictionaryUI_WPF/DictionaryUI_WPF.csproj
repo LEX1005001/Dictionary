@@ -37,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -59,13 +61,17 @@
     <Compile Include="Utilites\Btn.cs" />
     <Compile Include="Utilites\RelayCommand.cs" />
     <Compile Include="Utilites\ViewModelBase.cs" />
-    <Compile Include="ViewModel\ChangeWordViewModel.cs" />
+    <Compile Include="ViewModel\AddWordViewModel.cs" />
+    <Compile Include="ViewModel\DeleteWordViewModel.cs" />
     <Compile Include="ViewModel\DictionaryViewModel.cs" />
     <Compile Include="ViewModel\HomeViewModel.cs" />
     <Compile Include="ViewModel\NavigationVM.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
-    <Compile Include="View\AddView.xaml.cs">
-      <DependentUpon>AddView.xaml</DependentUpon>
+    <Compile Include="View\AddWordView.xaml.cs">
+      <DependentUpon>AddWordView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DeleteWordView.xaml.cs">
+      <DependentUpon>DeleteWordView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\DictionaryView.xaml.cs">
       <DependentUpon>DictionaryView.xaml</DependentUpon>
@@ -112,7 +118,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\AddView.xaml">
+    <Page Include="View\AddWordView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DeleteWordView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

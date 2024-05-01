@@ -12,17 +12,15 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Controls.Primitives;
 
-
-namespace DictionaryUI_WPF
+namespace DictionaryUI_WPF.View
 {
     /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
+    /// Логика взаимодействия для DeleteWordView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class DeleteWordView : UserControl
     {
-        public MainWindow()
+        public DeleteWordView()
         {
             InitializeComponent();
         }
