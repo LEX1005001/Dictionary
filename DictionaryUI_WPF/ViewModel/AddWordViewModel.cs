@@ -13,6 +13,10 @@ namespace DictionaryUI_WPF.ViewModel
     {
         private readonly PageModel _pageModel;
 
+        //1_Создать новую тему или добавить в имеющ.
+        //2_Ввести новое слово с его переводом 
+        //3_Добавить в DataBase
+
 
         public string NewWord
         {

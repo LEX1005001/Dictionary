@@ -12,6 +12,8 @@ namespace DictionaryUI_WPF.ViewModel
     {
         private readonly PageModel _pageModel;
 
+        //1_Введите номер слова с переводом, который вы хотите удалить
+
         public int NumberId2Delete
         {
             get { return _pageModel.Id; }

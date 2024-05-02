@@ -11,7 +11,9 @@ namespace DictionaryUI_WPF.ViewModel
     {
         private readonly PageModel _pageModel;
 
-
+        //1_Выбор темы на которую будет проходиться тест
+        //2_Тест формата {Какой перевод у слова isecream} и ввод {мороженое}
+        //2.1_Можно сделать обратный формат Перевод -> Слово
 
 
         public TestViewModel()
