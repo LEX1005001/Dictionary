@@ -9,7 +9,7 @@
     <Grid>
         <Border CornerRadius="0,20,20,0">
             <Grid>
-                <TextBlock Text="Dictionary with DataBase on WPF using C#"
+                <TextBlock Text="Dictionary on C# WPF with DataBase"
                            Style="{StaticResource HomeText}">
                             
                 </TextBlock>

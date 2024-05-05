@@ -12,12 +12,12 @@ namespace DictionaryUI_WPF.ViewModel
     class DictionaryViewModel : Utilites.ViewModelBase
     {
         private readonly PageModel _pageModel;
-        private object themesListBox;
+        
 
         //1_получение список Тем слов :(animal,food,street)
         //2_после выбора темы выводить все слова связанные с данной темой
 
-        private void ThemesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        /*private void ThemesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string selectedTheme = (themesListBox.SelectedItem as ListBoxItem)?.Content.ToString();
 
@@ -29,7 +29,7 @@ namespace DictionaryUI_WPF.ViewModel
                     wordsListView.Items.Add(new ListViewItem { Content = word });
                 }
             }
-        }
+        }*/
 
         public DictionaryViewModel()
         {

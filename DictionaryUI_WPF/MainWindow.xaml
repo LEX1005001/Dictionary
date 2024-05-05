@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="600"
-        Width="850"
+        Width="900"
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
@@ -125,7 +125,7 @@
             <Grid Grid.Column="1">
 
                 <ContentControl x:Name="Pages"
-                                Content="{Binding CurrentView}"/>
+                                Content="{Binding CurrentView}" Margin="0,0,-45,0"/>
 
 
             </Grid>
