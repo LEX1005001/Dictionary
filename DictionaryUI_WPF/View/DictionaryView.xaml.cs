@@ -19,7 +19,8 @@ namespace DictionaryUI_WPF.View
     
     public partial class DictionaryView : UserControl
     {
-        private Dictionary<string, List<string>> themeWords = new Dictionary<string, List<string>>();
+        private Dictionary<string, List<Tuple<int, string>>> themeWords = new Dictionary<string, List<Tuple<int, string>>>();
+
         public DictionaryView()
         {
             InitializeComponent();
@@ -44,17 +45,17 @@ namespace DictionaryUI_WPF.View
                         {
                             string themeName = readerThemes["Name"].ToString();
                             themesListBox.Items.Add(new ListBoxItem { Content = themeName });
-                            themeWords.Add(themeName, new List<string>());
+                            themeWords.Add(themeName, new List<Tuple<int, string>>());
                         }
                     }
                 }
 
-                // Загрузка слов для каждой темы из базы данных
+                // Загрузка слов и ID для каждой темы из базы данных
                 foreach (string theme in themeWords.Keys)
                 {
-                    string queryWords = "SELECT Word.thisWord FROM WordDictionary " +
-                                        "JOIN Word ON WordDictionary.WordId = Word.Id " +
-                                        "WHERE ThemeId = (SELECT Id FROM Theme WHERE Name = @ThemeName)";
+                    string queryWords = @"SELECT Word.Id, Word.thisWord FROM WordDictionary 
+                                          JOIN Word ON WordDictionary.WordId = Word.Id 
+                                          WHERE ThemeId = (SELECT Id FROM Theme WHERE Name = @ThemeName)";
                     using (SQLiteCommand commandWords = new SQLiteCommand(queryWords, connection))
                     {
                         commandWords.Parameters.AddWithValue("@ThemeName", theme);
@@ -62,8 +63,9 @@ namespace DictionaryUI_WPF.View
                         {
                             while (readerWords.Read())
                             {
+                                int wordId = Convert.ToInt32(readerWords["Id"]);
                                 string word = readerWords["thisWord"].ToString();
-                                themeWords[theme].Add(word);
+                                themeWords[theme].Add(new Tuple<int, string>(wordId, word));
                             }
                         }
                     }
@@ -80,9 +82,9 @@ namespace DictionaryUI_WPF.View
             if (selectedTheme != null)
             {
                 wordsListView.Items.Clear();
-                foreach (string word in themeWords[selectedTheme])
+                foreach (var item in themeWords[selectedTheme])
                 {
-                    wordsListView.Items.Add(new ListViewItem { Content = word });
+                    wordsListView.Items.Add(new ListViewItem { Content = $"{item.Item1} - {item.Item2}" });
                 }
             }
         }
