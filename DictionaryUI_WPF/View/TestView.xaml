@@ -11,24 +11,65 @@
         <vm:TestViewModel/>
     </UserControl.DataContext>
 
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Foreground" Value="LightGray"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#212529"/>
+            <Setter Property="BorderBrush" Value="DarkGray"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Foreground" Value="Black"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#007bff"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#212529"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="14"/>
+                
+        </Style>
+    </UserControl.Resources>
+
     <Grid Background="#212529">
-        <!-- Пример базовой разметки -->
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Тема теста:" Foreground="White" Margin="10"/>
+            <TextBlock Text="Тема теста:"/>
             <ComboBox ItemsSource="{Binding Themes}" 
-                      SelectedItem="{Binding CurrentTheme}"
-                      Foreground="White" Background="#212529" BorderBrush="Gray"/>
+                      SelectedItem="{Binding CurrentTheme}"/>
 
-            <TextBlock Text="Какой перевод у слова:" Foreground="White" Margin="10"/>
-            <TextBlock Text="{Binding CurrentWord}" Foreground="White" Margin="10"/>
+            <TextBlock Text="Какой перевод у слова:"/>
+            <TextBlock Text="{Binding CurrentWord}"/>
 
-            <TextBox Text="{Binding TranslationInput}" Foreground="White" Background="#212529"
-                     BorderBrush="Gray" Margin="10"/>
+            <TextBox Text="{Binding TranslationInput}"/>
 
-            <Button Command="{Binding CheckTranslationCommand}" Content="Проверить"
-                    Foreground="White" Background="#343a40" BorderBrush="Gray" Margin="10"/>
+            <Button Command="{Binding CheckTranslationCommand}" Content="Проверить"/>
 
-            <TextBlock Text="{Binding ResultMessage}" Foreground="White" Margin="10"/>
+            <TextBlock Text="{Binding ResultMessage}"/>
         </StackPanel>
     </Grid>
 </UserControl>
