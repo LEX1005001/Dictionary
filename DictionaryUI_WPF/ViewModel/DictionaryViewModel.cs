@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SQLite;
 using DictionaryUI_WPF.Utilites;
+using System.Windows.Markup;
 
 namespace DictionaryUI_WPF.ViewModel
 {
@@ -25,7 +26,7 @@ namespace DictionaryUI_WPF.ViewModel
 
         private void LoadThemesAndWordsFromDatabase()
         {
-            string connectionString = "Data Source=D:\\DataBase\\DictionaryDB.db;";
+            string connectionString = "Data Source = D:\\DataBase\\DictionaryDB.db; Version = 3;";
             using (SQLiteConnection connection = new SQLiteConnection(connectionString))
             {
                 connection.Open();

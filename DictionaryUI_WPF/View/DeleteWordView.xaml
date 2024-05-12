@@ -1,14 +1,76 @@
 ﻿<UserControl x:Class="DictionaryUI_WPF.View.DeleteWordView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DictionaryUI_WPF.View"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Is"
-            FontSize="30"
-            Style="{StaticResource Text_Style}"/>
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:DictionaryUI_WPF.ViewModel"
+        mc:Ignorable="d"
+        Height="450" Width="800">
+
+    <UserControl.DataContext>
+        <vm:DeleteWordViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Background="#212529">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="0.5*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Left side panel for themes -->
+        <StackPanel Grid.Column="0" Margin="20" HorizontalAlignment="Left">
+            <TextBlock Text="Themes" Foreground="White" FontSize="18" FontWeight="Bold"/>
+            <ListBox x:Name="ThemeList" 
+                    DisplayMemberPath="Name" 
+                    SelectedValuePath="Id" 
+                    Height="300" 
+                    Margin="0,10"
+                    ItemsSource="{Binding Themes}"
+                    SelectedItem="{Binding SelectedTheme, Mode=TwoWay}"
+                    Background="#2A2E32"
+                    Foreground="WhiteSmoke" 
+                    BorderBrush="#35393C"
+                    BorderThickness="1">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Padding" Value="3"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Button Content="Delete Theme" 
+                    Command="{Binding DeleteThemeCommand}"
+                    Background="#E04E39"
+                    Foreground="White"
+                    BorderBrush="#D04B36"/>
+        </StackPanel>
+
+        <!-- Right side panel for words -->
+        <StackPanel Grid.Column="1" Margin="20" HorizontalAlignment="Left">
+            <TextBlock Text="Words in Selected Theme" Foreground="White" FontSize="18" FontWeight="Bold"/>
+            <ListBox x:Name="WordList" 
+                    DisplayMemberPath="ThisWord" 
+                    SelectedValuePath="Id" 
+                    Height="300" 
+                    Margin="0,10"
+                    ItemsSource="{Binding Words}"
+                    SelectedItem="{Binding SelectedWord, Mode=TwoWay}"
+                    Background="#2A2E32"
+                    Foreground="WhiteSmoke"
+                    BorderBrush="#35393C"
+                    BorderThickness="1">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Margin" Value="5"/>
+                        <Setter Property="Padding" Value="3"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Button Content="Delete Word"
+                    Command="{Binding DeleteWordCommand}"
+                    Background="#E04E39"
+                    Foreground="White"
+                    BorderBrush="#D04B36"/>
+        </StackPanel>
     </Grid>
 </UserControl>
