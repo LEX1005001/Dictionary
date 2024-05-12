@@ -10,7 +10,7 @@ namespace DictionaryConsoleApp
 {
     internal class Tests
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //Создаём словарь dictionary1
             DictionaryWords dictionary1 = new DictionaryWords();
