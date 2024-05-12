@@ -12,36 +12,42 @@
     <UserControl.Resources>
         <!-- Стиль для элементов ListBox -->
         <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#E0E0E0"/>
+            <!-- светло-серый -->
             <Setter Property="FontSize" Value="16"/>
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="10"/>
-            <Setter Property="Background" Value="DarkGray"/>
+            <Setter Property="Background" Value="#33333d"/>
+            <!-- темно-серый -->
             <Setter Property="BorderBrush" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="Gray"/>
+                    <Setter Property="Background" Value="#1C6EA4"/>
+                  
                 </Trigger>
                 <Trigger Property="IsSelected" Value="True">
-                    <Setter Property="Background" Value="LightSkyBlue"/>
-                    <Setter Property="Foreground" Value="#212529"/>
+                    <Setter Property="Background" Value="#009B77"/>
+                    
+                    <Setter Property="Foreground" Value="#F9F9F9"/>
+                    
                 </Trigger>
             </Style.Triggers>
         </Style>
 
         <!-- Стиль для ListView Header -->
         <Style TargetType="GridViewColumnHeader">
-            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Foreground" Value="#F0F0F0"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="DarkSlateGray"/>
-            <Setter Property="Padding" Value="5"/>
+            <Setter Property="Background" Value="#1E2125"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
         </Style>
     </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="220"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
