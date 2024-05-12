@@ -16,10 +16,10 @@ using System.Windows.Shapes;
 
 namespace DictionaryUI_WPF.View
 {
-    
+
     public partial class DictionaryView : UserControl
     {
-        private Dictionary<string, List<Tuple<int, string>>> themeWords = new Dictionary<string, List<Tuple<int, string>>>();
+        private Dictionary<string, List<Tuple<int, string, string>>> themeWords = new Dictionary<string, List<Tuple<int, string, string>>>();
 
         public DictionaryView()
         {
@@ -45,7 +45,7 @@ namespace DictionaryUI_WPF.View
                         {
                             string themeName = readerThemes["Name"].ToString();
                             themesListBox.Items.Add(new ListBoxItem { Content = themeName });
-                            themeWords.Add(themeName, new List<Tuple<int, string>>());
+                            themeWords.Add(themeName, new List<Tuple<int, string, string>>());
                         }
                     }
                 }
@@ -53,9 +53,10 @@ namespace DictionaryUI_WPF.View
                 // Загрузка слов и ID для каждой темы из базы данных
                 foreach (string theme in themeWords.Keys)
                 {
-                    string queryWords = @"SELECT Word.Id, Word.thisWord FROM WordDictionary 
-                                          JOIN Word ON WordDictionary.WordId = Word.Id 
-                                          WHERE ThemeId = (SELECT Id FROM Theme WHERE Name = @ThemeName)";
+                    string queryWords = @"SELECT Word.Id, Word.thisWord, WordDictionary.Translation FROM WordDictionary 
+                      JOIN Word ON WordDictionary.WordId = Word.Id 
+                      JOIN Theme ON WordDictionary.ThemeId = Theme.Id
+                      WHERE Theme.Name = @ThemeName";
                     using (SQLiteCommand commandWords = new SQLiteCommand(queryWords, connection))
                     {
                         commandWords.Parameters.AddWithValue("@ThemeName", theme);
@@ -65,7 +66,8 @@ namespace DictionaryUI_WPF.View
                             {
                                 int wordId = Convert.ToInt32(readerWords["Id"]);
                                 string word = readerWords["thisWord"].ToString();
-                                themeWords[theme].Add(new Tuple<int, string>(wordId, word));
+                                string translation = readerWords["Translation"].ToString();
+                                themeWords[theme].Add(new Tuple<int, string, string>(wordId, word, translation));
                             }
                         }
                     }
@@ -78,13 +80,20 @@ namespace DictionaryUI_WPF.View
         private void ThemesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string selectedTheme = (themesListBox.SelectedItem as ListBoxItem)?.Content.ToString();
-
             if (selectedTheme != null)
             {
+                wordsListView.IsEnabled = true; // Возможно, потребуется включать ListView
                 wordsListView.Items.Clear();
                 foreach (var item in themeWords[selectedTheme])
                 {
-                    wordsListView.Items.Add(new ListViewItem { Content = $"{item.Item1} - {item.Item2}" });
+                    var lvi = new ListViewItem();
+                    lvi.Content = new
+                    {
+                        ID = item.Item1,
+                        Word = item.Item2,
+                        Translation = item.Item3
+                    };
+                    wordsListView.Items.Add(lvi);
                 }
             }
         }

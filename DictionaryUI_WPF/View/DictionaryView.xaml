@@ -3,10 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:DictionaryUI_WPF.View"
+             xmlns:local="clr-namespace:DictionaryUI_WPF.View" 
+             xmlns:local1="clr-namespace:DictionaryUI_WPF.ViewModel"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800"
              Background="#212529">
+
     <UserControl.Resources>
         <!-- Стиль для элементов ListBox -->
         <Style x:Key="ListBoxItemStyle" TargetType="ListBoxItem">
@@ -53,8 +55,9 @@
         <ListView x:Name="wordsListView" Grid.Column="1" IsEnabled="False">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="ID - Слово"
-                                    Width="150"/>
+                    <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding ID}"/>
+                    <GridViewColumn Header="Слово" Width="150" DisplayMemberBinding="{Binding Word}"/>
+                    <GridViewColumn Header="Перевод" Width="200" DisplayMemberBinding="{Binding Translation}"/>
                 </GridView>
             </ListView.View>
         </ListView>
