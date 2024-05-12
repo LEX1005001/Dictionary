@@ -4,11 +4,31 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DictionaryUI_WPF.View"
+             xmlns:vm="clr-namespace:DictionaryUI_WPF.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Yoric"
-            FontSize="30"
-            Style="{StaticResource Text_Style}"/>
+    <UserControl.DataContext>
+        <vm:TestViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Background="#212529">
+        <!-- Пример базовой разметки -->
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="Тема теста:" Foreground="White" Margin="10"/>
+            <ComboBox ItemsSource="{Binding Themes}" 
+                      SelectedItem="{Binding CurrentTheme}"
+                      Foreground="White" Background="#212529" BorderBrush="Gray"/>
+
+            <TextBlock Text="Какой перевод у слова:" Foreground="White" Margin="10"/>
+            <TextBlock Text="{Binding CurrentWord}" Foreground="White" Margin="10"/>
+
+            <TextBox Text="{Binding TranslationInput}" Foreground="White" Background="#212529"
+                     BorderBrush="Gray" Margin="10"/>
+
+            <Button Command="{Binding CheckTranslationCommand}" Content="Проверить"
+                    Foreground="White" Background="#343a40" BorderBrush="Gray" Margin="10"/>
+
+            <TextBlock Text="{Binding ResultMessage}" Foreground="White" Margin="10"/>
+        </StackPanel>
     </Grid>
 </UserControl>
