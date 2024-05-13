@@ -18,9 +18,6 @@
         <vm:NavigationVM/>
     </Window.DataContext>
 
-    <Window.DataContext>
-        <vm:TestViewModel/>
-    </Window.DataContext>
 
     <Grid>
 
