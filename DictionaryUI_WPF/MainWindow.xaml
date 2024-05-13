@@ -18,15 +18,18 @@
         <vm:NavigationVM/>
     </Window.DataContext>
 
+    <Window.DataContext>
+        <vm:TestViewModel/>
+    </Window.DataContext>
+
     <Grid>
-        
-            
+
         <!--Window Border-->
         <Border Background="#212529"
                 CornerRadius="20"/>
 
         <Grid>
-            
+
 
             <!--Base Grid-->
             <Grid.ColumnDefinitions>
@@ -131,13 +134,13 @@
             </Grid>
 
         </Grid>
-        
+
 
         <Button x:Name="CloseApp"
                 Style="{StaticResource ExitApp}"
                 Click="CloseApp_Click" />
-        
 
+        <Image  Source="{Binding ResultImagePath}" Width="329" Height="101" Stretch="Fill" HorizontalAlignment="Left" Margin="398,0,0,60" VerticalAlignment="Bottom" />
     </Grid>
 
 </Window>

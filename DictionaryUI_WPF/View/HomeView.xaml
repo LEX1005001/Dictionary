@@ -6,16 +6,26 @@
              xmlns:local="clr-namespace:DictionaryUI_WPF.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style x:Key="HomeText" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10"/>
+        </Style>
+
+        <Style x:Key="BorderBackground" TargetType="Border">
+            <Setter Property="Background" Value="#212529"/>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-        <Border CornerRadius="0,20,20,0">
+        <Border CornerRadius="0,20,20,0" Style="{StaticResource BorderBackground}">
             <Grid>
-                <TextBlock Text="Dictionary on C# WPF with DataBase"
-                           Style="{StaticResource HomeText}">
-                            
-                </TextBlock>
-                
+                <TextBlock Text="Dictionary on C# WPF with DataBase" Style="{StaticResource HomeText}" />
             </Grid>
-            
         </Border>
     </Grid>
 </UserControl>

@@ -137,6 +137,7 @@ namespace DictionaryUI_WPF.ViewModel
             {
                 CurrentWord = "";
                 ResultMessage = $"Результат: {correctAnswers}/{totalWordsTested}";
+                UpdateResultImage(correctAnswers, totalWordsTested); // Новый метод для обновления изображения
             }
         }
 
@@ -155,6 +156,47 @@ namespace DictionaryUI_WPF.ViewModel
             }
             TranslationInput = "";
             NextWord();
+        }
+        
+        /// <summary>
+        /// Картинка от результата
+        /// </summary>
+        private string resultImagePath;
+
+        /// <summary>
+        /// Конструктор карртинки
+        /// </summary>
+        public string ResultImagePath
+        {
+            get { return resultImagePath; }
+            set
+            {
+                resultImagePath = value;
+                OnPropertyChanged(nameof(ResultImagePath)); 
+            }
+        }
+
+        /// <summary>
+        /// Логика смены фотографий от скора
+        /// </summary>
+        /// <param name="correct"></param>
+        /// <param name="total"></param>
+        private void UpdateResultImage(int correct, int total)
+        {
+            double score = (double)correct / total;
+
+            if (score == 1)
+            {
+                ResultImagePath = "Images/score_Good.png"; // Полный путь к изображению для совершенного результата
+            }
+            else if (score >= 0.5)
+            {
+                ResultImagePath = "Images/score_Norm.png"; // Путь к изображению для половины или более
+            }
+            else
+            {
+                ResultImagePath = "Images/score_Sad.png"; // Путь к изображению для менее чем половины
+            }
         }
 
         protected void OnPropertyChanged(string propertyName)

@@ -52,24 +52,44 @@
             <Setter Property="Margin" Value="10"/>
             <Setter Property="FontFamily" Value="Segoe UI"/>
             <Setter Property="FontSize" Value="14"/>
-                
+
         </Style>
+
+        <Style TargetType="Image">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+        </Style>
+
     </UserControl.Resources>
 
     <Grid Background="#212529">
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="Тема теста:"/>
-            <ComboBox ItemsSource="{Binding Themes}" 
-                      SelectedItem="{Binding CurrentTheme}"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*" MinHeight="101"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Какой перевод у слова:"/>
-            <TextBlock Text="{Binding CurrentWord}"/>
+        <TextBlock Grid.Row="0" Text="Тема теста:"/>
+        <ComboBox Grid.Row="1" ItemsSource="{Binding Themes}" 
+                  SelectedItem="{Binding CurrentTheme}"/>
 
-            <TextBox Text="{Binding TranslationInput}"/>
+        <TextBlock Grid.Row="2" Text="Какой перевод у слова:"/>
+        <TextBlock Grid.Row="3" Text="{Binding CurrentWord}"/>
 
-            <Button Command="{Binding CheckTranslationCommand}" Content="Проверить"/>
+        <TextBox Grid.Row="4" Text="{Binding TranslationInput}"/>
 
-            <TextBlock Text="{Binding ResultMessage}"/>
-        </StackPanel>
+        <Button Grid.Row="5" Command="{Binding CheckTranslationCommand}" Content="Проверить"/>
+
+        <TextBlock Grid.Row="6" Text="{Binding ResultMessage}"/>
+
+        <Image Grid.Row="7"  Source="{Binding ResultImagePath}" Width="329" Height="101" Stretch="Uniform" HorizontalAlignment="Left" Margin="233,0,0,34" Grid.RowSpan="2" VerticalAlignment="Bottom" />
     </Grid>
 </UserControl>
