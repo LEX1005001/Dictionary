@@ -79,6 +79,7 @@
     <Compile Include="Model\AddWordModel.cs" />
     <Compile Include="Model\PageModel.cs" />
     <Compile Include="Utilites\Btn.cs" />
+    <Compile Include="Utilites\DataBaseConnection.cs" />
     <Compile Include="Utilites\RelayCommand.cs" />
     <Compile Include="Utilites\ViewModelBase.cs" />
     <Compile Include="ViewModel\AddWordViewModel.cs" />

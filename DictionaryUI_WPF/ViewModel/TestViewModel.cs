@@ -187,15 +187,15 @@ namespace DictionaryUI_WPF.ViewModel
 
             if (score == 1)
             {
-                ResultImagePath = "Images/score_Good.png"; // Полный путь к изображению для совершенного результата
+                ResultImagePath = "..\\Images\\score_Good.png"; // Полный путь к изображению для совершенного результата
             }
             else if (score >= 0.5)
             {
-                ResultImagePath = "Images/score_Norm.png"; // Путь к изображению для половины или более
+                ResultImagePath = "..\\Images\\score_Norm.png"; // Путь к изображению для половины или более
             }
             else
             {
-                ResultImagePath = "Images/score_Sad.png"; // Путь к изображению для менее чем половины
+                ResultImagePath = "..\\Images\\score_Sad.png"; // Путь к изображению для менее чем половины
             }
         }
 
