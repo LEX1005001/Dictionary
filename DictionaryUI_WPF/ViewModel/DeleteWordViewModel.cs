@@ -47,7 +47,14 @@ namespace DictionaryUI_WPF.ViewModel
             {
                 selectedTheme = value;
                 OnPropertyChanged(nameof(SelectedTheme));
-                LoadWordsForTheme(selectedTheme.Id);
+                if (selectedTheme != null)
+                {
+                    LoadWordsForTheme(selectedTheme.Id);
+                }
+                else
+                {
+                    Words.Clear(); // Очищаем слова, если тема не выбрана
+                }
             }
         }
 
@@ -77,77 +84,88 @@ namespace DictionaryUI_WPF.ViewModel
         private void LoadThemes()
         {
             Themes.Clear();
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;"))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = @"SELECT Id, Name FROM Theme";
-                using (var reader = command.ExecuteReader())
+                using (var command = connection.CreateCommand())
                 {
-                    while (reader.Read())
+                    command.CommandText = "SELECT Id, Name FROM Theme";
+                    using (var reader = command.ExecuteReader())
                     {
-                        Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
+                        while (reader.Read())
+                        {
+                            Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
+                        }
                     }
                 }
-            }
+            });
         }
 
         private void LoadWordsForTheme(int themeId)
         {
             Words.Clear();
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;"))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = @"SELECT Word.Id, Word.thisWord 
-                                        FROM Word 
-                                        JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
-                                        WHERE WordDictionary.ThemeId = $themeId";
-                command.Parameters.AddWithValue("$themeId", themeId);
-                using (var reader = command.ExecuteReader())
+                using (var command = connection.CreateCommand())
                 {
-                    while (reader.Read())
+                    command.CommandText = @"SELECT Word.Id, Word.thisWord 
+                                    FROM Word 
+                                    JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
+                                    WHERE WordDictionary.ThemeId = $themeId";
+                    command.Parameters.AddWithValue("$themeId", themeId);
+                    using (var reader = command.ExecuteReader())
                     {
-                        Words.Add(new Word { Id = reader.GetInt32(0), ThisWord = reader.GetString(1) });
+                        while (reader.Read())
+                        {
+                            Words.Add(new Word { Id = reader.GetInt32(0), ThisWord = reader.GetString(1) });
+                        }
                     }
                 }
-            }
+            });
         }
 
         private void DeleteTheme()
         {
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;"))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
                 using (var transaction = connection.BeginTransaction())
                 {
-                    // Delete words from WordDictionary 
-                    var command = connection.CreateCommand();
-                    command.CommandText = "DELETE FROM WordDictionary WHERE ThemeId = $themeId";
-                    command.Parameters.AddWithValue("$themeId", selectedTheme.Id);
-                    command.ExecuteNonQuery();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "DELETE FROM WordDictionary WHERE ThemeId = $themeId";
+                        command.Parameters.AddWithValue("$themeId", selectedTheme.Id);
+                        command.ExecuteNonQuery();
+                    }
 
-                    // Delete the theme
-                    command.CommandText = "DELETE FROM Theme WHERE Id = $themeId";
-                    command.ExecuteNonQuery();
+                    using (var command = connection.CreateCommand())
+                    {
+                        command.CommandText = "DELETE FROM Theme WHERE Id = $themeId";
+                        command.Parameters.AddWithValue("$themeId", selectedTheme.Id);
+                        command.ExecuteNonQuery();
+                    }
 
                     transaction.Commit();
                 }
-            }
-            LoadThemes();
+            });
+
+            // Очистка данных после удаления темы
             Words.Clear();
+            Themes.Remove(selectedTheme);
+            selectedTheme = null; // Обнуляем выбранную тему после её удаления
+            OnPropertyChanged(nameof(SelectedTheme)); // Уведомляем об изменении
         }
 
         private void DeleteWord()
         {
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;"))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
-                var command = connection.CreateCommand();
-                command.CommandText = "DELETE FROM WordDictionary WHERE WordId = $wordId";
-                command.Parameters.AddWithValue("$wordId", selectedWord.Id);
-                command.ExecuteNonQuery();
-            }
+                using (var command = connection.CreateCommand())
+                {
+                    command.CommandText = "DELETE FROM WordDictionary WHERE WordId = $wordId";
+                    command.Parameters.AddWithValue("$wordId", selectedWord.Id);
+                    command.ExecuteNonQuery();
+                }
+            });
+
             LoadWordsForTheme(selectedTheme.Id);
         }
 

@@ -88,6 +88,6 @@
 
         <TextBlock Grid.Row="6" Text="{Binding ResultMessage}"/>
 
-        <Image Grid.Row="7"  Source="{Binding ResultImagePath}" Width="355" Height="124" Stretch="Fill" HorizontalAlignment="Left" Margin="137,0,0,36" Grid.RowSpan="2" VerticalAlignment="Bottom" />
+        <Image Grid.Row="7" Source="{Binding ResultImagePath}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10" Grid.RowSpan="2" Stretch="UniformToFill"/>
     </Grid>
 </UserControl>

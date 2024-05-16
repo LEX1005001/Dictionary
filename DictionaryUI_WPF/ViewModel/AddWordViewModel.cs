@@ -42,21 +42,21 @@ namespace DictionaryUI_WPF.ViewModel
 
         private void LoadThemes()
         {
-            var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;");
-            connection.Open();
-            var command = new SQLiteCommand("SELECT * FROM Theme", connection);
-            var reader = command.ExecuteReader();
-            while (reader.Read())
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
-            }
+                var command = new SQLiteCommand("SELECT * FROM Theme", connection);
+                var reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
+                }
+            });
         }
 
         private void AddWordToSelectedTheme()
         {
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;"))
+            DataBaseHelper.Instance.ExecuteDbOperation((connection) =>
             {
-                connection.Open();
                 using (var transaction = connection.BeginTransaction())
                 {
                     // Добавляем слово в таблицу Word
@@ -73,14 +73,13 @@ namespace DictionaryUI_WPF.ViewModel
 
                     transaction.Commit();
                 }
-            }
+            });
         }
 
         private void CreateThemeAndAddWord()
         {
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;"))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
                 using (var transaction = connection.BeginTransaction())
                 {
                     // Создаем новую тему
@@ -100,13 +99,13 @@ namespace DictionaryUI_WPF.ViewModel
                     dictionaryCommand.Parameters.AddWithValue("@translation", Translation);
                     dictionaryCommand.ExecuteNonQuery();
 
-                    // Обновляем список тем в UI
-                    Themes.Clear();
-                    LoadThemes();
-
                     transaction.Commit();
                 }
-            }
+
+                // Обновляем список тем в UI
+                Themes.Clear();
+                LoadThemes();
+            });
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

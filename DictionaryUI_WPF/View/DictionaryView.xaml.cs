@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DictionaryUI_WPF.Utilites;
+using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Linq;
@@ -29,12 +30,8 @@ namespace DictionaryUI_WPF.View
 
         private void LoadThemesAndWordsFromDatabase()
         {
-            string connectionString = "Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;";
-
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
-
                 // Загрузка тем из базы данных
                 string queryThemes = "SELECT Name FROM Theme";
                 using (SQLiteCommand commandThemes = new SQLiteCommand(queryThemes, connection))
@@ -49,14 +46,14 @@ namespace DictionaryUI_WPF.View
                         }
                     }
                 }
-
                 // Загрузка слов и ID для каждой темы из базы данных
                 foreach (string theme in themeWords.Keys)
                 {
                     string queryWords = @"SELECT Word.Id, Word.thisWord, WordDictionary.Translation FROM WordDictionary 
-                      JOIN Word ON WordDictionary.WordId = Word.Id 
-                      JOIN Theme ON WordDictionary.ThemeId = Theme.Id
-                      WHERE Theme.Name = @ThemeName";
+                                    JOIN Word ON WordDictionary.WordId = Word.Id 
+                                    JOIN Theme ON WordDictionary.ThemeId = Theme.Id
+                                    WHERE Theme.Name = @ThemeName";
+
                     using (SQLiteCommand commandWords = new SQLiteCommand(queryWords, connection))
                     {
                         commandWords.Parameters.AddWithValue("@ThemeName", theme);
@@ -72,13 +69,11 @@ namespace DictionaryUI_WPF.View
                         }
                     }
                 }
-
-                connection.Close();
-            }
+            });
         }
 
         private void ThemesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
+            {
             string selectedTheme = (themesListBox.SelectedItem as ListBoxItem)?.Content.ToString();
             if (selectedTheme != null)
             {

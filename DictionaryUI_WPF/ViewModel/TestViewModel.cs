@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DictionaryUI_WPF.Model;
+using DictionaryUI_WPF.Utilites;
 
 namespace DictionaryUI_WPF.ViewModel
 {
@@ -75,7 +76,7 @@ namespace DictionaryUI_WPF.ViewModel
         private int totalWordsTested;
         private int correctAnswers;
 
-        private ObservableCollection<Tuple<string, string>> wordsPool; // Word and Translation
+        private ObservableCollection<Tuple<string, string>> wordsPool;
         private Random random = new Random();
 
         public ICommand CheckTranslationCommand { get; }
@@ -89,38 +90,48 @@ namespace DictionaryUI_WPF.ViewModel
         private void LoadThemes()
         {
             Themes = new ObservableCollection<string>();
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3"))
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
                 string query = "SELECT Name FROM Theme";
-                SQLiteCommand command = new SQLiteCommand(query, connection);
-                SQLiteDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+                using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                using (SQLiteDataReader reader = command.ExecuteReader())
                 {
-                    Themes.Add(reader.GetString(0));
+                    while (reader.Read())
+                    {
+                        Themes.Add(reader.GetString(0));
+                    }
                 }
-            }
+            });
         }
 
         private void LoadWords(string theme)
         {
             wordsPool = new ObservableCollection<Tuple<string, string>>();
-            using (var connection = new SQLiteConnection("Data Source=D:\\DataBase\\DictionaryDB.db;Version=3"))
+
+            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
             {
-                connection.Open();
-                string query = "SELECT Word.thisWord, WordDictionary.Translation FROM Word JOIN WordDictionary ON Word.Id = WordDictionary.WordId JOIN Theme ON Theme.Id = WordDictionary.ThemeId WHERE Theme.Name = @themeName";
-                SQLiteCommand command = new SQLiteCommand(query, connection);
+                string query = @"SELECT Word.thisWord, WordDictionary.Translation 
+                         FROM Word 
+                         JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
+                         JOIN Theme ON Theme.Id = WordDictionary.ThemeId 
+                         WHERE Theme.Name = @themeName";
+                var command = new SQLiteCommand(query, connection);
                 command.Parameters.AddWithValue("@themeName", theme);
-                SQLiteDataReader reader = command.ExecuteReader();
-                while (reader.Read())
+
+                using (var reader = command.ExecuteReader())
                 {
-                    wordsPool.Add(new Tuple<string, string>(reader.GetString(0), reader.GetString(1)));
+                    while (reader.Read())
+                    {
+                        wordsPool.Add(new Tuple<string, string>(reader.GetString(0), reader.GetString(1)));
+                    }
                 }
-                NextWord();
-                totalWordsTested = 0;
-                correctAnswers = 0;
-                ResultMessage = "";
-            }
+            });
+
+            // Обновление данных тестирования после загрузки новых слов
+            NextWord();
+            totalWordsTested = 0;
+            correctAnswers = 0;
+            ResultMessage = "";
         }
 
         private void NextWord()

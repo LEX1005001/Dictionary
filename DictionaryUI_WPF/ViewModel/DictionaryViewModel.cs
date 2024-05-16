@@ -26,27 +26,22 @@ namespace DictionaryUI_WPF.ViewModel
 
         private void LoadThemesAndWordsFromDatabase()
         {
-            string connectionString = "Data Source = D:\\DataBase\\DictionaryDB.db; Version = 3;";
-            using (SQLiteConnection connection = new SQLiteConnection(connectionString))
+            using (var connection = DataBaseHelper.Instance.GetConnection())
             {
-                connection.Open();
                 LoadThemes(connection);
                 LoadWordsForThemes(connection);
-                connection.Close();
             }
         }
 
         private void LoadThemes(SQLiteConnection connection)
         {
-            string queryThemes = "SELECT Name FROM Theme";
-            using (var commandThemes = new SQLiteCommand(queryThemes, connection))
+            Themes.Clear();
+            var command = new SQLiteCommand("SELECT Id, Name FROM Theme", connection);
+            using (var reader = command.ExecuteReader())
             {
-                using (var readerThemes = commandThemes.ExecuteReader())
+                while (reader.Read())
                 {
-                    while (readerThemes.Read())
-                    {
-                        Themes.Add(new Theme { Name = readerThemes["Name"].ToString() });
-                    }
+                    Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
                 }
             }
         }
@@ -55,23 +50,23 @@ namespace DictionaryUI_WPF.ViewModel
         {
             foreach (var theme in Themes)
             {
-                string queryWords = @"SELECT Word.Id, Word.thisWord FROM WordDictionary 
-                                  JOIN Word ON WordDictionary.WordId = Word.Id 
-                                  WHERE ThemeId = (SELECT Id FROM Theme WHERE Name = @ThemeName)";
+                Words.Clear(); // It should be considered if you really want to clear words for every theme.
+                LoadWordsForTheme(theme.Id, connection);
+            }
+        }
 
-                using (var commandWords = new SQLiteCommand(queryWords, connection))
+        private void LoadWordsForTheme(int themeId, SQLiteConnection connection)
+        {
+            var command = new SQLiteCommand(@"SELECT Word.Id, Word.thisWord 
+                                          FROM Word 
+                                          JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
+                                          WHERE WordDictionary.ThemeId = @themeId", connection);
+            command.Parameters.AddWithValue("@themeId", themeId);
+            using (var reader = command.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    commandWords.Parameters.AddWithValue("@ThemeName", theme.Name);
-
-                    using (var readerWords = commandWords.ExecuteReader())
-                    {
-                        while (readerWords.Read())
-                        {
-                            var wordId = readerWords["Id"].ToString();
-                            var word = readerWords["thisWord"].ToString();
-                            Words.Add($"{wordId} - {word}");
-                        }
-                    }
+                    Words.Add(reader.GetString(1));
                 }
             }
         }

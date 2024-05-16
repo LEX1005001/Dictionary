@@ -79,7 +79,7 @@
     <Compile Include="Model\AddWordModel.cs" />
     <Compile Include="Model\PageModel.cs" />
     <Compile Include="Utilites\Btn.cs" />
-    <Compile Include="Utilites\DataBaseConnection.cs" />
+    <Compile Include="Utilites\DataBaseHelper.cs" />
     <Compile Include="Utilites\RelayCommand.cs" />
     <Compile Include="Utilites\ViewModelBase.cs" />
     <Compile Include="ViewModel\AddWordViewModel.cs" />
@@ -115,10 +115,6 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PopupUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Styles\Button.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -161,9 +157,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PopupUserControl.xaml.cs">
-      <DependentUpon>PopupUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +179,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Utilites\DictionaryDB.db" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
