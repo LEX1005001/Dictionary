@@ -6,7 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DictionaryUI_WPF.Utilites
-{
+{   //Singlton-патерн проектирования
+
     /// <summary>
     /// Класс для удобного подключения БД к проекту
     /// </summary>
@@ -15,6 +16,10 @@ namespace DictionaryUI_WPF.Utilites
         private static DataBaseHelper instance;
         private static readonly object lockObject = new object();
         private SQLiteConnection connection;
+
+        /// <summary>
+        /// *Ссылка на БД
+        /// </summary>
         private readonly string connectionString = "Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;";
 
         private DataBaseHelper()
@@ -36,10 +41,14 @@ namespace DictionaryUI_WPF.Utilites
             }
         }
 
+        /// <summary>
+        /// Объект для обеспечения потокобезопасности при создании экземпляра `DataBaseHelper`
+        /// </summary>
         public static DataBaseHelper Instance
         {
             get
             {
+                //избежание создания нескольких экземпляров в многопоточной среде
                 lock (lockObject)
                 {
                     if (instance == null)
@@ -51,6 +60,10 @@ namespace DictionaryUI_WPF.Utilites
             }
         }
 
+        /// <summary>
+        /// Получение соединения с БД
+        /// </summary>
+        /// <returns></returns>
         public SQLiteConnection GetConnection()
         {
             var connection = new SQLiteConnection(connectionString);
@@ -58,6 +71,9 @@ namespace DictionaryUI_WPF.Utilites
             return connection;
         }
 
+        /// <summary>
+        /// Закрыть соединение с БД
+        /// </summary>
         public void CloseConnection()
         {
             connection.Close();

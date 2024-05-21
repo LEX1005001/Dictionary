@@ -16,14 +16,27 @@ namespace DictionaryUI_WPF.ViewModel
 {
     public class DictionaryViewModel
     {
+        /// <summary>
+        ///  Коллекцию тем
+        /// </summary>
         public ObservableCollection<Theme> Themes { get; private set; } = new ObservableCollection<Theme>();
+
+        /// <summary>
+        /// Коллекция слов
+        /// </summary>
         public ObservableCollection<string> Words { get; private set; } = new ObservableCollection<string>();
 
+        /// <summary>
+        /// Инициализация Dictionary ViewModel
+        /// </summary>
         public DictionaryViewModel()
         {
             LoadThemesAndWordsFromDatabase();
         }
 
+        /// <summary>
+        /// Загрузка Слов и Тем из БД
+        /// </summary>
         private void LoadThemesAndWordsFromDatabase()
         {
             using (var connection = DataBaseHelper.Instance.GetConnection())
@@ -33,6 +46,10 @@ namespace DictionaryUI_WPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// Загрузка тем из БД
+        /// </summary>
+        /// <param name="connection">DB source</param>
         private void LoadThemes(SQLiteConnection connection)
         {
             Themes.Clear();
@@ -46,15 +63,24 @@ namespace DictionaryUI_WPF.ViewModel
             }
         }
 
+        /// <summary>
+        /// Загрузка слов из БД
+        /// </summary>
+        /// <param name="connection">DB source</param>
         private void LoadWordsForThemes(SQLiteConnection connection)
         {
             foreach (var theme in Themes)
             {
-                Words.Clear(); // It should be considered if you really want to clear words for every theme.
+                Words.Clear(); 
                 LoadWordsForTheme(theme.Id, connection);
             }
         }
 
+        /// <summary>
+        /// Загрузка слов из БД из опред темы (по ID)
+        /// </summary>
+        /// <param name="themeId">ID theme</param>
+        /// <param name="connection">DB source</param>
         private void LoadWordsForTheme(int themeId, SQLiteConnection connection)
         {
             var command = new SQLiteCommand(@"SELECT Word.Id, Word.thisWord 

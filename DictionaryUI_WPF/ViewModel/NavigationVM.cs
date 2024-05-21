@@ -43,11 +43,7 @@ namespace DictionaryUI_WPF.ViewModel
 
             //Strat Page
             CurrentView = new HomeViewModel();
+         
         }
-
-
-
-
     }
-
 }
