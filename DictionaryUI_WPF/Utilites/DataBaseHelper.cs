@@ -20,7 +20,7 @@ namespace DictionaryUI_WPF.Utilites
         /// <summary>
         /// *Ссылка на БД
         /// </summary>
-        private readonly string connectionString = "Data Source=D:\\DataBase\\DictionaryDB.db;Version=3;";
+        private readonly string connectionString = "Data Source=C:\\Users\\AleX6\\Desktop\\Test\\Dictionary\\DictionaryUI_WPF\\Utilites\\DictionaryDB.db;Version=3;";
 
         private DataBaseHelper()
         {
