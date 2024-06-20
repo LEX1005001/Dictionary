@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace DictionaryUI_WPF.Utilites
-{   //Singlton-патерн проектирования
+{   ///Singlton-патерн проектирования
 
     /// <summary>
     /// Класс для удобного подключения БД к проекту
