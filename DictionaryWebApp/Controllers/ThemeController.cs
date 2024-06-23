@@ -16,7 +16,7 @@ namespace DictionaryWebApp.Controllers
             _context = context;
         }
 
-        [HttpPost]
+        [HttpPost("AddTheme/")]
         public async Task<ActionResult<List<Theme>>> AddTheme([FromBody] Theme theme)
         {
             _context.Themes.Add(theme);
@@ -25,13 +25,13 @@ namespace DictionaryWebApp.Controllers
             return Ok(await _context.Themes.ToListAsync());
         }
 
-        [HttpGet]
+        [HttpGet("GetAllThemes/")]
         public async Task<ActionResult<List<Theme>>> GetAllThemes()
         {
             return Ok(await _context.Themes.ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetThemeById/{id}")]
         public async Task<ActionResult<Theme>> GetTheme(int id)
         {
             var theme = await _context.Themes.FindAsync(id);

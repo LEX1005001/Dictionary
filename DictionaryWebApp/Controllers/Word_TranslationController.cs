@@ -16,7 +16,7 @@ namespace DictionaryWebApp.Controllers
             _context = context;
         }
 
-        [HttpPost]
+        [HttpPost("AddWord_Tr/")]
         public async Task<ActionResult<List<Word_Tr>>> AddWord_Tr([FromBody] Word_Tr word_tr)
         {
             _context.Words_Themes.Add(word_tr);
@@ -25,13 +25,13 @@ namespace DictionaryWebApp.Controllers
             return Ok(await _context.Words_Themes.ToListAsync());
         }
 
-        [HttpGet]
+        [HttpGet("GetAllWords_Tr/")]
         public async Task<ActionResult<List<Word_Tr>>> GetAllWords_Trs()
         {
             return Ok(await _context.Words_Themes.ToListAsync());
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("GetWordsById/{id}")]
         public async Task<ActionResult<Word_Tr>> GetWord_Tr(int id)
         {
             var word_tr = await _context.Words_Themes.FindAsync(id);
@@ -41,5 +41,21 @@ namespace DictionaryWebApp.Controllers
             }
             return Ok(word_tr);
         }
+
+        [HttpGet("GetWordsByTheme/{themeId}")]
+        public async Task<ActionResult<List<Word_Tr>>> GetWordsByTheme(int themeId)
+        {
+            var wordsByTheme = await _context.Words_Themes
+            .Where(wt => wt.ThemeId == themeId)
+            .ToListAsync();
+
+            if (!wordsByTheme.Any())
+            {
+                return NotFound("No words found for the specified theme.");
+            }
+
+            return Ok(wordsByTheme);
+        }
+
     }
 }

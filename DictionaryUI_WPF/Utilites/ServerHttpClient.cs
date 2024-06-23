@@ -16,17 +16,17 @@ namespace DictionaryUI_WPF.Utilites
         public ServerHttpClient()
         {
             _client = new HttpClient();
-            _client.BaseAddress = new Uri("http://localhost:5174"); 
+            _client.BaseAddress = new Uri("http://localhost:7223");
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
 
-        // Метод для получения списка тем
-        public async Task<List<Theme>> GetThemesAsync()
+        // Метод для получения списка всех тем
+        public async Task<List<Theme>> GetAllThemesAsync()
         {
             List<Theme> themes = new List<Theme>();
 
-            HttpResponseMessage response = await _client.GetAsync("/themes"); // Путь к методу получения списка тем на сервере
+            HttpResponseMessage response = await _client.GetAsync("/GetAllThemes/");
 
             if (response.IsSuccessStatusCode)
             {
@@ -37,12 +37,28 @@ namespace DictionaryUI_WPF.Utilites
             return themes;
         }
 
+        // Метод для получения темы по ID
+        public async Task<Theme> GetThemeByIdAsync(int themeId)
+        {
+            Theme theme = null;
+
+            HttpResponseMessage response = await _client.GetAsync($"/GetThemeById/{themeId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                theme = JsonConvert.DeserializeObject<Theme>(json);
+            }
+
+            return theme;
+        }
+
         // Метод для получения списка слов по теме
         public async Task<List<Word_Tr>> GetWordsByThemeAsync(int themeId)
         {
             List<Word_Tr> words = new List<Word_Tr>();
 
-            HttpResponseMessage response = await _client.GetAsync($"/themes/{themeId}/words"); // Путь к методу получения списка слов по теме на сервере
+            HttpResponseMessage response = await _client.GetAsync($"/GetWordsByTheme/{themeId}");
 
             if (response.IsSuccessStatusCode)
             {
