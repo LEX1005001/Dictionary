@@ -16,7 +16,7 @@ namespace DictionaryUI_WPF.Utilites
         public ServerHttpClient()
         {
             _client = new HttpClient();
-            _client.BaseAddress = new Uri("http://localhost:7223");
+            _client.BaseAddress = new Uri("https://localhost:7223");
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
