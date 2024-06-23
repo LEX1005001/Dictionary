@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 
 namespace DictionaryUI_WPF.Model
 {
-    public class Word
+    public class Word_Tr
     {
         public int Id { get; set; }
-        public string ThisWord { get; set; }
+
+        public string Word { get; set; } = string.Empty;
+
+        public string Translation { get; set; } = string.Empty;
+
+        public int ThemeId { get; set; }
     }
 
-    public class WordDictionary
+    public class Theme
     {
         public int Id { get; set; }
-        public int ThemeId { get; set; }
-        public int WordId { get; set; }
-        public string Translation { get; set; }
+        public string Name { get; set; }
     }
 }

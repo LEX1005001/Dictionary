@@ -31,70 +31,71 @@ namespace DictionaryUI_WPF.ViewModel
         /// </summary>
         public DictionaryViewModel()
         {
-            LoadThemesAndWordsFromDatabase();
+            //LoadThemesAndWordsFromDatabase();
         }
 
         /// <summary>
         /// Загрузка Слов и Тем из БД
         /// </summary>
-        private void LoadThemesAndWordsFromDatabase()
-        {
-            using (var connection = DataBaseHelper.Instance.GetConnection())
-            {
-                LoadThemes(connection);
-                LoadWordsForThemes(connection);
-            }
-        }
+        //private void LoadThemesAndWordsFromDatabase()
+        //{
+        //    using (var connection = DataBaseHelper.Instance.GetConnection())
+        //    {
+        //        LoadThemes(connection);
+        //        LoadWordsForThemes(connection);
+        //    }
+        //}
 
-        /// <summary>
-        /// Загрузка тем из БД
-        /// </summary>
-        /// <param name="connection">DB source</param>
-        private void LoadThemes(SQLiteConnection connection)
-        {
-            Themes.Clear();
-            var command = new SQLiteCommand("SELECT Id, Name FROM Theme", connection);
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
-                }
-            }
-        }
+        //    /// <summary>
+        //    /// Загрузка тем из БД
+        //    /// </summary>
+        //    /// <param name="connection">DB source</param>
+        //    private void LoadThemes(SQLiteConnection connection)
+        //    {
+        //        Themes.Clear();
+        //        var command = new SQLiteCommand("SELECT Id, Name FROM Theme", connection);
+        //        using (var reader = command.ExecuteReader())
+        //        {
+        //            while (reader.Read())
+        //            {
+        //                Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
+        //            }
+        //        }
+        //    }
 
-        /// <summary>
-        /// Загрузка слов из БД
-        /// </summary>
-        /// <param name="connection">DB source</param>
-        private void LoadWordsForThemes(SQLiteConnection connection)
-        {
-            foreach (var theme in Themes)
-            {
-                Words.Clear(); 
-                LoadWordsForTheme(theme.Id, connection);
-            }
-        }
+        //    /// <summary>
+        //    /// Загрузка слов из БД
+        //    /// </summary>
+        //    /// <param name="connection">DB source</param>
+        //    private void LoadWordsForThemes(SQLiteConnection connection)
+        //    {
+        //        foreach (var theme in Themes)
+        //        {
+        //            Words.Clear(); 
+        //            LoadWordsForTheme(theme.Id, connection);
+        //        }
+        //    }
 
-        /// <summary>
-        /// Загрузка слов из БД из опред темы (по ID)
-        /// </summary>
-        /// <param name="themeId">ID theme</param>
-        /// <param name="connection">DB source</param>
-        private void LoadWordsForTheme(int themeId, SQLiteConnection connection)
-        {
-            var command = new SQLiteCommand(@"SELECT Word.Id, Word.thisWord 
-                                          FROM Word 
-                                          JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
-                                          WHERE WordDictionary.ThemeId = @themeId", connection);
-            command.Parameters.AddWithValue("@themeId", themeId);
-            using (var reader = command.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    Words.Add(reader.GetString(1));
-                }
-            }
-        }
+        //    /// <summary>
+        //    /// Загрузка слов из БД из опред темы (по ID)
+        //    /// </summary>
+        //    /// <param name="themeId">ID theme</param>
+        //    /// <param name="connection">DB source</param>
+        //    private void LoadWordsForTheme(int themeId, SQLiteConnection connection)
+        //    {
+        //        var command = new SQLiteCommand(@"SELECT Word.Id, Word.thisWord 
+        //                                      FROM Word 
+        //                                      JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
+        //                                      WHERE WordDictionary.ThemeId = @themeId", connection);
+        //        command.Parameters.AddWithValue("@themeId", themeId);
+        //        using (var reader = command.ExecuteReader())
+        //        {
+        //            while (reader.Read())
+        //            {
+        //                Words.Add(reader.GetString(1));
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
