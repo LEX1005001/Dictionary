@@ -16,7 +16,7 @@ namespace DictionaryUI_WPF.Utilites
         public ServerHttpClient()
         {
             _client = new HttpClient();
-            _client.BaseAddress = new Uri("https://localhost:7223");
+            _client.BaseAddress = new Uri("https://localhost:7223/");
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
         }
@@ -26,7 +26,7 @@ namespace DictionaryUI_WPF.Utilites
         {
             List<Theme> themes = new List<Theme>();
 
-            HttpResponseMessage response = await _client.GetAsync("/GetAllThemes/");
+            HttpResponseMessage response = await _client.GetAsync("api/Theme/GetAllThemes");
 
             if (response.IsSuccessStatusCode)
             {
@@ -42,7 +42,7 @@ namespace DictionaryUI_WPF.Utilites
         {
             Theme theme = null;
 
-            HttpResponseMessage response = await _client.GetAsync($"/GetThemeById/{themeId}");
+            HttpResponseMessage response = await _client.GetAsync($"api/Theme/GetThemeById/{themeId}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -58,7 +58,7 @@ namespace DictionaryUI_WPF.Utilites
         {
             List<Word_Tr> words = new List<Word_Tr>();
 
-            HttpResponseMessage response = await _client.GetAsync($"/GetWordsByTheme/{themeId}");
+            HttpResponseMessage response = await _client.GetAsync($"api/Word_Translation/GetWordsByTheme/{themeId}");
 
             if (response.IsSuccessStatusCode)
             {

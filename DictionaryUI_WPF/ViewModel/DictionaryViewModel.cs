@@ -11,91 +11,98 @@ using System.ComponentModel;
 using System.Data.SQLite;
 using DictionaryUI_WPF.Utilites;
 using System.Windows.Markup;
+using System.Windows.Threading;
+using DictionaryUI_WPF.View;
+using System.Runtime.CompilerServices;
 
 namespace DictionaryUI_WPF.ViewModel
 {
-    public class DictionaryViewModel
+    public class DictionaryViewModel : INotifyPropertyChanged
     {
-        /// <summary>
-        ///  Коллекцию тем
-        /// </summary>
-        public ObservableCollection<Theme> Themes { get; private set; } = new ObservableCollection<Theme>();
+        private readonly ServerHttpClient _serverHttpClient = new ServerHttpClient();
+        private Dictionary<string, List<Tuple<int, string, string>>> themeWords = new Dictionary<string, List<Tuple<int, string, string>>>();
+        private ObservableCollection<string> _themes = new ObservableCollection<string>();
+        private ObservableCollection<dynamic> _words = new ObservableCollection<dynamic>();
 
-        /// <summary>
-        /// Коллекция слов
-        /// </summary>
-        public ObservableCollection<string> Words { get; private set; } = new ObservableCollection<string>();
-
-        /// <summary>
-        /// Инициализация Dictionary ViewModel
-        /// </summary>
-        public DictionaryViewModel()
+        public ObservableCollection<string> Themes
         {
-            //LoadThemesAndWordsFromDatabase();
+            get => _themes;
+            set
+            {
+                _themes = value;
+                OnPropertyChanged();
+            }
         }
 
-        /// <summary>
-        /// Загрузка Слов и Тем из БД
-        /// </summary>
-        //private void LoadThemesAndWordsFromDatabase()
-        //{
-        //    using (var connection = DataBaseHelper.Instance.GetConnection())
-        //    {
-        //        LoadThemes(connection);
-        //        LoadWordsForThemes(connection);
-        //    }
-        //}
+        public ObservableCollection<dynamic> Words
+        {
+            get => _words;
+            set
+            {
+                _words = value;
+                OnPropertyChanged();
+            }
+        }
 
-        //    /// <summary>
-        //    /// Загрузка тем из БД
-        //    /// </summary>
-        //    /// <param name="connection">DB source</param>
-        //    private void LoadThemes(SQLiteConnection connection)
-        //    {
-        //        Themes.Clear();
-        //        var command = new SQLiteCommand("SELECT Id, Name FROM Theme", connection);
-        //        using (var reader = command.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
-        //            }
-        //        }
-        //    }
+        private string _selectedTheme;
+        public string SelectedTheme
+        {
+            get => _selectedTheme;
+            set
+            {
+                if (_selectedTheme != value)
+                {
+                    _selectedTheme = value;
+                    OnPropertyChanged();
+                    LoadWordsForSelectedTheme();
+                }
+            }
+        }
 
-        //    /// <summary>
-        //    /// Загрузка слов из БД
-        //    /// </summary>
-        //    /// <param name="connection">DB source</param>
-        //    private void LoadWordsForThemes(SQLiteConnection connection)
-        //    {
-        //        foreach (var theme in Themes)
-        //        {
-        //            Words.Clear(); 
-        //            LoadWordsForTheme(theme.Id, connection);
-        //        }
-        //    }
+        public DictionaryViewModel()
+        {
+            Task.Run(() => LoadThemesAndWordsFromServerAsync().ConfigureAwait(false));
+        }
 
-        //    /// <summary>
-        //    /// Загрузка слов из БД из опред темы (по ID)
-        //    /// </summary>
-        //    /// <param name="themeId">ID theme</param>
-        //    /// <param name="connection">DB source</param>
-        //    private void LoadWordsForTheme(int themeId, SQLiteConnection connection)
-        //    {
-        //        var command = new SQLiteCommand(@"SELECT Word.Id, Word.thisWord 
-        //                                      FROM Word 
-        //                                      JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
-        //                                      WHERE WordDictionary.ThemeId = @themeId", connection);
-        //        command.Parameters.AddWithValue("@themeId", themeId);
-        //        using (var reader = command.ExecuteReader())
-        //        {
-        //            while (reader.Read())
-        //            {
-        //                Words.Add(reader.GetString(1));
-        //            }
-        //        }
-        //    }
-        //}
+        private async Task LoadThemesAndWordsFromServerAsync()
+        {
+            var themes = await _serverHttpClient.GetAllThemesAsync();
+            foreach (var theme in themes)
+            {
+                Themes.Add(theme.Name);
+
+                var words = await _serverHttpClient.GetWordsByThemeAsync(theme.Id);
+                var wordList = new List<Tuple<int, string, string>>();
+                foreach (var word in words)
+                {
+                    wordList.Add(new Tuple<int, string, string>(word.Id, word.Word, word.Translation));
+                }
+                themeWords.Add(theme.Name, wordList);
+            }
+        }
+
+        private void LoadWordsForSelectedTheme()
+        {
+            if (SelectedTheme != null && themeWords.TryGetValue(SelectedTheme, out var wordList))
+            {
+                Words.Clear();
+                foreach (var item in wordList)
+                {
+                    Words.Add(new
+                    {
+                        ID = item.Item1,
+                        Word = item.Item2,
+                        Translation = item.Item3
+                    });
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

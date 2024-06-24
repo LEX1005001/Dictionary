@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DictionaryUI_WPF.ViewModel;
 
 namespace DictionaryUI_WPF.View
 {

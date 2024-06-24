@@ -16,6 +16,11 @@ namespace DictionaryWebApp.Controllers
             _context = context;
         }
 
+        /// <summary>
+        /// Добавление слова с переводом
+        /// </summary>
+        /// <param name="word_tr"></param>
+        /// <returns></returns>
         [HttpPost("AddWord_Tr/")]
         public async Task<ActionResult<List<Word_Tr>>> AddWord_Tr([FromBody] Word_Tr word_tr)
         {
@@ -25,12 +30,21 @@ namespace DictionaryWebApp.Controllers
             return Ok(await _context.Words_Themes.ToListAsync());
         }
 
+        /// <summary>
+        /// Получение всех слов
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetAllWords_Tr/")]
         public async Task<ActionResult<List<Word_Tr>>> GetAllWords_Trs()
         {
             return Ok(await _context.Words_Themes.ToListAsync());
         }
 
+        /// <summary>
+        /// Получение Слова с переводом по id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Word_Tr</returns>
         [HttpGet("GetWordsById/{id}")]
         public async Task<ActionResult<Word_Tr>> GetWord_Tr(int id)
         {
@@ -42,6 +56,11 @@ namespace DictionaryWebApp.Controllers
             return Ok(word_tr);
         }
 
+        /// <summary>
+        /// Получние слов по {id}темы
+        /// </summary>
+        /// <param name="themeId">{id}темы</param>
+        /// <returns>Word_Tr</returns>
         [HttpGet("GetWordsByTheme/{themeId}")]
         public async Task<ActionResult<List<Word_Tr>>> GetWordsByTheme(int themeId)
         {
