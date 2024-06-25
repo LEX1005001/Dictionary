@@ -41,5 +41,28 @@ namespace DictionaryWebApp.Controllers
             }
             return Ok(theme);
         }
+
+        /// <summary>
+        /// Удаление темы и всех связанных с ней слов и переводов
+        /// </summary>
+        /// <param name="themeId">ID темы, которую необходимо удалить</param>
+        /// <returns></returns>
+        [HttpDelete("DeleteThemeWithWords/{themeId}")]
+        public async Task<IActionResult> DeleteThemeWithWords(int themeId)
+        {
+            var theme = await _context.Themes.FindAsync(themeId);
+            if (theme == null)
+            {
+                return NotFound("Theme not found.");
+            }
+
+            var words = await _context.Words_Themes.Where(w => w.ThemeId == themeId).ToListAsync();
+            _context.Words_Themes.RemoveRange(words);
+            _context.Themes.Remove(theme);
+
+            await _context.SaveChangesAsync();
+            return Ok("Theme and related words and translations have been deleted successfully.");
+        }
     }
 }
+

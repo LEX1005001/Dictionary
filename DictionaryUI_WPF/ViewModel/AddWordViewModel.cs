@@ -7,12 +7,15 @@ using System.Windows.Input;
 using System.Windows;
 using DictionaryUI_WPF.Model;
 using DictionaryUI_WPF.Utilites;
+using System.Net.Http;
 
 
 namespace DictionaryUI_WPF.ViewModel
 {
     public class AddWordViewModel : INotifyPropertyChanged
     {
+        private ServerHttpClient _serverHttpClient = new ServerHttpClient();
+
         public ObservableCollection<Theme> Themes { get; set; } = new ObservableCollection<Theme>();
         private Theme selectedTheme;
         public Theme SelectedTheme
@@ -40,72 +43,60 @@ namespace DictionaryUI_WPF.ViewModel
             CreateThemeAndAddWordCommand = new RelayCommandDictionary(CreateThemeAndAddWord);
         }
 
-        private void LoadThemes()
+        private async void LoadThemes()
         {
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            Themes.Clear();
+            var themesFromServer = await _serverHttpClient.GetAllThemesAsync();
+            foreach (var theme in themesFromServer)
             {
-                var command = new SQLiteCommand("SELECT * FROM Theme", connection);
-                var reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
-                }
-            });
+                Themes.Add(theme);
+            }
         }
 
-        private void AddWordToSelectedTheme()
+        private async void AddWordToSelectedTheme()
         {
-            DataBaseHelper.Instance.ExecuteDbOperation((connection) =>
+            var wordToAdd = new Word_Tr
             {
-                using (var transaction = connection.BeginTransaction())
-                {
-                    // Добавляем слово в таблицу Word
-                    var wordCommand = new SQLiteCommand("INSERT INTO Word (thisWord) VALUES (@word); SELECT last_insert_rowid();", connection);
-                    wordCommand.Parameters.AddWithValue("@word", NewWord.ThisWord);
-                    var wordId = (long)wordCommand.ExecuteScalar();
+                Word = NewWord.ThisWord,
+                Translation = Translation
+            };
 
-                    // Добавляем слово и перевод в таблицу WordDictionary
-                    var dictionaryCommand = new SQLiteCommand("INSERT INTO WordDictionary (ThemeId, WordId, Translation) VALUES (@themeId, @wordId, @translation)", connection);
-                    dictionaryCommand.Parameters.AddWithValue("@themeId", SelectedTheme.Id);
-                    dictionaryCommand.Parameters.AddWithValue("@wordId", wordId);
-                    dictionaryCommand.Parameters.AddWithValue("@translation", Translation);
-                    dictionaryCommand.ExecuteNonQuery();
+            try
+            {
+                var wordsForTheme = await _serverHttpClient.AddWordToThemeAsync(SelectedTheme.Id, wordToAdd);
+                // Вывод сообщения о успешном добавлении слова.
+                MessageBox.Show("Слово успешно добавлено к теме.");
 
-                    transaction.Commit();
-                }
-            });
+            }
+            catch (HttpRequestException e)
+            {
+                MessageBox.Show($"Ошибка при добавлении слова к теме: {e.Message}");
+            }
         }
 
-        private void CreateThemeAndAddWord()
+        private async void CreateThemeAndAddWord()
         {
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            try
             {
-                using (var transaction = connection.BeginTransaction())
+                bool result = await _serverHttpClient.AddNewThemeWithWordAsync(NewTheme.Name, NewWord.ThisWord, Translation);
+                if (result)
                 {
-                    // Создаем новую тему
-                    var themeCommand = new SQLiteCommand("INSERT INTO Theme (Name) VALUES (@name); SELECT last_insert_rowid();", connection);
-                    themeCommand.Parameters.AddWithValue("@name", NewTheme.Name);
-                    var themeId = (long)themeCommand.ExecuteScalar();
-
-                    // Добавляем слово
-                    var wordCommand = new SQLiteCommand("INSERT INTO Word (thisWord) VALUES (@word); SELECT last_insert_rowid();", connection);
-                    wordCommand.Parameters.AddWithValue("@word", NewWord.ThisWord);
-                    var wordId = (long)wordCommand.ExecuteScalar();
-
-                    // Добавляем в словарь
-                    var dictionaryCommand = new SQLiteCommand("INSERT INTO WordDictionary (ThemeId, WordId, Translation) VALUES (@themeId, @wordId, @translation)", connection);
-                    dictionaryCommand.Parameters.AddWithValue("@themeId", themeId);
-                    dictionaryCommand.Parameters.AddWithValue("@wordId", wordId);
-                    dictionaryCommand.Parameters.AddWithValue("@translation", Translation);
-                    dictionaryCommand.ExecuteNonQuery();
-
-                    transaction.Commit();
+                    MessageBox.Show("Тема и слово успешно добавлены");
+                    var themesFromServer = await _serverHttpClient.GetAllThemesAsync(); // Обновляем список тем асинхронно после добавления новой темы
+                    foreach (var theme in themesFromServer)
+                    {
+                        Themes.Add(theme);
+                    } 
                 }
-
-                // Обновляем список тем в UI
-                Themes.Clear();
-                LoadThemes();
-            });
+                else
+                {
+                    MessageBox.Show("Ошибка при добавлении темы и слова");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Произошла ошибка: {ex.Message}");
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Objects;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -68,6 +69,78 @@ namespace DictionaryUI_WPF.Utilites
 
             return words;
         }
+
+        // Метод для добавления слова с переводом к определенной теме по Id
+        public async Task<List<Word_Tr>> AddWordToThemeAsync(int themeId, Word_Tr word_tr)
+        {
+            var jsonContent = JsonConvert.SerializeObject(word_tr);
+            var contentString = new StringContent(jsonContent, Encoding.UTF8, "application/json");
+
+            HttpResponseMessage response = await _client.PostAsync($"api/Word_Translation/AddWord_trToTheme/{themeId}", contentString);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                var wordsForTheme = JsonConvert.DeserializeObject<List<Word_Tr>>(json);
+                return wordsForTheme;
+            }
+
+            throw new HttpRequestException($"Error adding word to theme with ID {themeId}: {response.ReasonPhrase}");
+        }
+
+        // Метод для добавления новой темы с словом и переводом
+        public async Task<bool> AddNewThemeWithWordAsync(string name, string word, string translation)
+        {
+            try
+            {
+                var newThemeData = new
+                {
+                    name = name,
+                    word = word,
+                    translation = translation
+                };
+
+                HttpResponseMessage response = await _client.PostAsync("api/Word_Translation/AddNewThemeWithWord_tr/",
+                    new StringContent(JsonConvert.SerializeObject(newThemeData), Encoding.UTF8, "application/json"));
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return true;
+                }
+                else
+                {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Server error: {responseContent}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception occurred: {ex.Message}");
+                return false;
+            }
+        }
+
+
+
+        // Метод для удаления слова с переводом по Id
+        public async Task<List<Word_Tr>> DeleteWord_TrAsync(int id)
+        {
+            HttpResponseMessage response = await _client.DeleteAsync($"api/Word_Tr/DeleteWord_Tr/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                string json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Word_Tr>>(json);
+            }
+            else
+            {
+                throw new Exception("Ошибка при удалении слова с переводом: " + response.ReasonPhrase);
+            }
+        }
+
+
+
 
         public void Dispose()
         {
