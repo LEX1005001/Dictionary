@@ -10,11 +10,14 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data.SQLite;
 using System.Windows.Input;
+using System.Windows.Forms;
 
 namespace DictionaryUI_WPF.ViewModel
 {
     public class DeleteWordViewModel : INotifyPropertyChanged
     {
+        private ServerHttpClient _serverHttpClient = new ServerHttpClient();
+
         private ObservableCollection<Theme> themes;
         private ObservableCollection<Word> words;
         private Theme selectedTheme;
@@ -53,7 +56,7 @@ namespace DictionaryUI_WPF.ViewModel
                 }
                 else
                 {
-                    Words.Clear(); // Очищаем слова, если тема не выбрана
+                    Words.Clear();
                 }
             }
         }
@@ -75,99 +78,74 @@ namespace DictionaryUI_WPF.ViewModel
         {
             Themes = new ObservableCollection<Theme>();
             Words = new ObservableCollection<Word>();
-            LoadThemes();
+            LoadThemesAsync();
 
-            DeleteThemeCommand = new RelayCommand(o => DeleteTheme(), o => selectedTheme != null);
-            DeleteWordCommand = new RelayCommand(o => DeleteWord(), o => selectedWord != null);
+            DeleteThemeCommand = new RelayCommand(o => DeleteThemeAsync(), o => selectedTheme != null);
+            DeleteWordCommand = new RelayCommand(o => DeleteWordAsync(), o => selectedWord != null);
         }
 
-        private void LoadThemes()
+        private async void LoadThemesAsync()
         {
-            Themes.Clear();
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            try
             {
-                using (var command = connection.CreateCommand())
+                var themes = await _serverHttpClient.GetAllThemesAsync();
+                foreach (var theme in themes)
                 {
-                    command.CommandText = "SELECT Id, Name FROM Theme";
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Themes.Add(new Theme { Id = reader.GetInt32(0), Name = reader.GetString(1) });
-                        }
-                    }
+                    Themes.Add(theme); 
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
-        private void LoadWordsForTheme(int themeId)
+        private async void LoadWordsForTheme(int themeId)
         {
             Words.Clear();
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            try
             {
-                using (var command = connection.CreateCommand())
+                var wordsByTheme = await _serverHttpClient.GetWordsByThemeAsync(themeId);
+                foreach (var word in wordsByTheme)
                 {
-                    command.CommandText = @"SELECT Word.Id, Word.thisWord 
-                                    FROM Word 
-                                    JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
-                                    WHERE WordDictionary.ThemeId = $themeId";
-                    command.Parameters.AddWithValue("$themeId", themeId);
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Words.Add(new Word { Id = reader.GetInt32(0), ThisWord = reader.GetString(1) });
-                        }
-                    }
+                    Words.Add(new Word { Id = word.Id, ThisWord = word.Word });
                 }
-            });
+            }
+            catch (Exception ex)
+            {
+                
+                MessageBox.Show(ex.Message);
+            }
         }
 
-        private void DeleteTheme()
+        private async Task DeleteThemeAsync()
         {
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
-            {
-                using (var transaction = connection.BeginTransaction())
-                {
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = "DELETE FROM WordDictionary WHERE ThemeId = $themeId";
-                        command.Parameters.AddWithValue("$themeId", selectedTheme.Id);
-                        command.ExecuteNonQuery();
-                    }
+            await _serverHttpClient.DeleteThemeWithWordsAsync(selectedTheme.Id);
 
-                    using (var command = connection.CreateCommand())
-                    {
-                        command.CommandText = "DELETE FROM Theme WHERE Id = $themeId";
-                        command.Parameters.AddWithValue("$themeId", selectedTheme.Id);
-                        command.ExecuteNonQuery();
-                    }
-
-                    transaction.Commit();
-                }
-            });
-
-            // Очистка данных после удаления темы
-            Words.Clear();
             Themes.Remove(selectedTheme);
-            selectedTheme = null; // Обнуляем выбранную тему после её удаления
-            OnPropertyChanged(nameof(SelectedTheme)); // Уведомляем об изменении
+            Words.Clear();
+            selectedTheme = null;
+            OnPropertyChanged(nameof(SelectedTheme));
+
+           
         }
 
-        private void DeleteWord()
+        private async Task DeleteWordAsync()
         {
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            try
             {
-                using (var command = connection.CreateCommand())
-                {
-                    command.CommandText = "DELETE FROM WordDictionary WHERE WordId = $wordId";
-                    command.Parameters.AddWithValue("$wordId", selectedWord.Id);
-                    command.ExecuteNonQuery();
-                }
-            });
-
-            LoadWordsForTheme(selectedTheme.Id);
+                await _serverHttpClient.DeleteWord_TrAsync(selectedWord.Id);
+                LoadWordsForTheme(selectedTheme.Id);
+            }
+            catch (Exception ex)
+            {
+                // Обработка ошибки
+                // Например, вывести сообщение пользователю
+                MessageBox.Show(ex.Message);
+            }
         }
+
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged(string propertyName)

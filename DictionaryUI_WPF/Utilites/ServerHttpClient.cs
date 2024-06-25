@@ -121,12 +121,10 @@ namespace DictionaryUI_WPF.Utilites
             }
         }
 
-
-
         // Метод для удаления слова с переводом по Id
         public async Task<List<Word_Tr>> DeleteWord_TrAsync(int id)
         {
-            HttpResponseMessage response = await _client.DeleteAsync($"api/Word_Tr/DeleteWord_Tr/{id}");
+            HttpResponseMessage response = await _client.DeleteAsync($"api/Word_Translation/DeleteWord_Tr/{id}");
 
             if (response.IsSuccessStatusCode)
             {
@@ -136,6 +134,21 @@ namespace DictionaryUI_WPF.Utilites
             else
             {
                 throw new Exception("Ошибка при удалении слова с переводом: " + response.ReasonPhrase);
+            }
+        }
+
+        // Метод для удаления темы и всех связанных с ней слов и переводов
+        public async Task<string> DeleteThemeWithWordsAsync(int themeId)
+        {
+            HttpResponseMessage response = await _client.DeleteAsync($"api/Theme/DeleteThemeWithWords/{themeId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return "Theme and related words and translations have been deleted successfully.";
+            }
+            else
+            {
+                return $"Failed to delete theme: {response.StatusCode}.";
             }
         }
 
