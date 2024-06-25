@@ -16,26 +16,30 @@ namespace DictionaryUI_WPF.ViewModel
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        private ObservableCollection<string> themes;
+        private ServerHttpClient serverHttpClient = new ServerHttpClient();
+        private ObservableCollection<Theme> themes;
         public ObservableCollection<string> Themes
         {
-            get => themes;
+            get => themes == null ? new ObservableCollection<string>() : new ObservableCollection<string>(themes.Select(t => t.Name).ToList());
             set
             {
-                themes = value;
+                themes = new ObservableCollection<Theme>(value.Select(name => new Theme { Name = name }));
                 OnPropertyChanged(nameof(Themes));
             }
         }
 
-        private string currentTheme;
+        private Theme currentTheme;
         public string CurrentTheme
         {
-            get => currentTheme;
+            get => currentTheme?.Name;
             set
             {
-                currentTheme = value;
+                currentTheme = themes.FirstOrDefault(t => t.Name == value);
                 OnPropertyChanged(nameof(CurrentTheme));
-                LoadWords(value);
+                if (currentTheme != null)
+                {
+                    LoadWords(currentTheme.Id);
+                }
             }
         }
 
@@ -76,7 +80,7 @@ namespace DictionaryUI_WPF.ViewModel
         private int totalWordsTested;
         private int correctAnswers;
 
-        private ObservableCollection<Tuple<string, string>> wordsPool;
+        private ObservableCollection<Tuple<string, string[]>> wordsPool;
         private Random random = new Random();
 
         public ICommand CheckTranslationCommand { get; }
@@ -84,54 +88,33 @@ namespace DictionaryUI_WPF.ViewModel
         public TestViewModel()
         {
             CheckTranslationCommand = new RelayCommand3(ValidateTranslation);
-            LoadThemes();
+            LoadThemesAsync();
         }
 
-        private void LoadThemes()
+        private async void LoadThemesAsync()
         {
-            Themes = new ObservableCollection<string>();
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            var themes = await serverHttpClient.GetAllThemesAsync();
+            if (themes != null)
             {
-                string query = "SELECT Name FROM Theme";
-                using (SQLiteCommand command = new SQLiteCommand(query, connection))
-                using (SQLiteDataReader reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        Themes.Add(reader.GetString(0));
-                    }
-                }
-            });
+                this.themes = new ObservableCollection<Theme>(themes);
+                OnPropertyChanged(nameof(Themes));
+            }
         }
 
-        private void LoadWords(string theme)
+        private async void LoadWords(int themeId)
         {
-            wordsPool = new ObservableCollection<Tuple<string, string>>();
-
-            DataBaseHelper.Instance.ExecuteDbOperation(connection =>
+            var words = await serverHttpClient.GetWordsByThemeAsync(themeId);
+            if (words != null)
             {
-                string query = @"SELECT Word.thisWord, WordDictionary.Translation 
-                         FROM Word 
-                         JOIN WordDictionary ON Word.Id = WordDictionary.WordId 
-                         JOIN Theme ON Theme.Id = WordDictionary.ThemeId 
-                         WHERE Theme.Name = @themeName";
-                var command = new SQLiteCommand(query, connection);
-                command.Parameters.AddWithValue("@themeName", theme);
+                wordsPool = new ObservableCollection<Tuple<string, string[]>>(
+                    words.GroupBy(word => word.Word)
+                         .Select(group => new Tuple<string, string[]>(group.Key, group.Select(w => w.Translation).ToArray())));
 
-                using (var reader = command.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        wordsPool.Add(new Tuple<string, string>(reader.GetString(0), reader.GetString(1)));
-                    }
-                }
-            });
-
-            // Обновление данных тестирования после загрузки новых слов
-            NextWord();
-            totalWordsTested = 0;
-            correctAnswers = 0;
-            ResultMessage = "";
+                NextWord();
+                totalWordsTested = 0;
+                correctAnswers = 0;
+                ResultMessage = "";
+            }
         }
 
         private void NextWord()
@@ -141,14 +124,14 @@ namespace DictionaryUI_WPF.ViewModel
                 int index = random.Next(wordsPool.Count);
                 var wordPair = wordsPool[index];
                 CurrentWord = wordPair.Item1;
-                currentWordTranslation = wordPair.Item2;  // Сохраняем перевод для текущего слова
+                currentWordTranslation = string.Join(", ", wordPair.Item2);  // Сохраняем переводы для текущего слова
                 wordsPool.RemoveAt(index);
             }
             else
             {
                 CurrentWord = "";
                 ResultMessage = $"Результат: {correctAnswers}/{totalWordsTested}";
-                UpdateResultImage(correctAnswers, totalWordsTested); // Новый метод для обновления изображения
+                UpdateResultImage(correctAnswers, totalWordsTested); // Метод для обновления изображения
             }
         }
 
@@ -156,7 +139,8 @@ namespace DictionaryUI_WPF.ViewModel
         {
             if (CurrentWord == null || currentWordTranslation == null) return;
             totalWordsTested++;
-            if (translationInput.Equals(currentWordTranslation, StringComparison.OrdinalIgnoreCase))
+            var translationsArray = currentWordTranslation.Split(',').Select(t => t.Trim()).ToArray();
+            if (translationsArray.Contains(translationInput, StringComparer.OrdinalIgnoreCase))
             {
                 correctAnswers++;
                 ResultMessage = "Верно!";
@@ -168,30 +152,23 @@ namespace DictionaryUI_WPF.ViewModel
             TranslationInput = "";
             NextWord();
         }
-        
-        /// <summary>
-        /// Картинка от результата
-        /// </summary>
-        private string resultImagePath;
 
-        /// <summary>
-        /// Конструктор карртинки
-        /// </summary>
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private string resultImagePath;
         public string ResultImagePath
         {
             get { return resultImagePath; }
             set
             {
                 resultImagePath = value;
-                OnPropertyChanged(nameof(ResultImagePath)); 
+                OnPropertyChanged(nameof(ResultImagePath));
             }
         }
 
-        /// <summary>
-        /// Логика смены фотографий от скора
-        /// </summary>
-        /// <param name="correct"></param>
-        /// <param name="total"></param>
         private void UpdateResultImage(int correct, int total)
         {
             double score = (double)correct / total;
@@ -208,11 +185,8 @@ namespace DictionaryUI_WPF.ViewModel
             {
                 ResultImagePath = "..\\Images\\score_Sad.png"; // Путь к изображению для менее чем половины
             }
-        }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         }
     }
 
@@ -241,4 +215,7 @@ namespace DictionaryUI_WPF.ViewModel
             execute();
         }
     }
+
 }
+
+   
