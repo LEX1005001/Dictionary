@@ -36,5 +36,16 @@ namespace DictionaryUI_WPF
         {
             Close();
         }
+
+        // Обработка события мыши для перемещения окна
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
+        }
     }
 }
+    
+

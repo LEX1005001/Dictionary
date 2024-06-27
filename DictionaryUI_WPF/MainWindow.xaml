@@ -12,7 +12,8 @@
         AllowsTransparency="True"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        Background="Transparent">
+        Background="Transparent"
+        MouseLeftButtonDown="Window_MouseLeftButtonDown">
 
     <Window.DataContext>
         <vm:NavigationVM/>
@@ -20,6 +21,7 @@
 
 
     <Grid>
+        
 
         <!--Window Border-->
         <Border Background="#212529"
